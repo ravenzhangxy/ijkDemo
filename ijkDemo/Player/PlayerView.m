@@ -13,15 +13,27 @@
 @interface PlayerView()<PlayerDelegate>
 
 @property (atomic, retain) id<IJKMediaPlayback> player;
+@property (nonatomic, strong) PlayerControlView *controlView;
+@property (nonatomic, assign) CGRect originFrame;
 
 @end
 
 @implementation PlayerView
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.player.view.frame = self.bounds;
+    self.player.scalingMode = IJKMPMovieScalingModeAspectFill;
+
+    self.controlView.frame = self.bounds;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSString *)videoUrl
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.originFrame = frame;
         [self initIJKPlayer:videoUrl];
         [self initControlView];
     }
@@ -45,16 +57,16 @@
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:videoUrl] withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.player.view.frame = self.bounds;
-    self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
+    self.player.scalingMode = IJKMPMovieScalingModeAspectFill;
     self.player.shouldAutoplay = YES;
     [self addSubview:self.player.view];
 }
 
 - (void)initControlView
 {
-    PlayerControlView *controlView = [[PlayerControlView alloc] initWithFrame:self.bounds];
-    [self addSubview:controlView];
-    controlView.delegate = self;
+    self.controlView = [[PlayerControlView alloc] initWithFrame:self.bounds];
+    [self addSubview:self.controlView];
+    self.controlView.delegate = self;
 }
 
 #pragma mark Public Method
@@ -77,6 +89,56 @@
 - (void)pause
 {
     [self.player pause];
+}
+
+- (void)transformScreen:(BOOL)isZoomUp
+{
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGFloat x = screenSize.height/self.frame.size.width;
+    CGFloat y = screenSize.width/self.frame.size.height;
+    
+    CGPoint newPosition = CGPointMake(screenSize.width/2, screenSize.height/2);
+    NSInteger transAngle = 90;
+    
+    if (!isZoomUp) {
+        // 从全屏变为顶部显示
+        x = 1.0;
+        y = 1.0;
+        newPosition = CGPointMake(_originFrame.size.width/2, CGRectGetHeight(_originFrame)/2+CGRectGetMinY(_originFrame));
+        transAngle = 0;
+    }
+    CGAffineTransform t = CGAffineTransformMakeScale(y, x);
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        weakSelf.layer.anchorPoint = CGPointMake(0.5,0.5);//围绕点
+        weakSelf.layer.position = newPosition;//位置
+        weakSelf.transform = CGAffineTransformRotate(t,transAngle* M_PI/180.0);
+        CGAffineTransform newTransform;
+        if (isZoomUp) {
+            weakSelf.controlView.fullScreen = YES;
+            newTransform = CGAffineTransformMakeScale(1/x, 1/y);
+        }
+        else {
+            weakSelf.controlView.fullScreen = NO;
+            newTransform = CGAffineTransformMakeScale(1, 1);
+        }
+        [weakSelf resetSubViewsTransform:newTransform];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+-(void)resetSubViewsTransform:(CGAffineTransform)aTransform
+{
+    for (UIView *sView in self.subviews) {
+        sView.transform = aTransform;
+    }
+    
+    for (CALayer *sLayer in self.layer.sublayers) {
+        sLayer.affineTransform = aTransform;
+    }
+    
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
 }
 
 #pragma mark Install Movie Notifications

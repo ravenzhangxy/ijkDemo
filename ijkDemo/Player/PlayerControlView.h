@@ -12,5 +12,6 @@
 @interface PlayerControlView : UIView
 
 @property (nonatomic, weak) id<PlayerDelegate>delegate;
+@property (nonatomic, getter=isFullScreen) BOOL fullScreen; 
 
 @end

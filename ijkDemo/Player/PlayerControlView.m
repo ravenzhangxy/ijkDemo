@@ -42,6 +42,32 @@
     return self;
 }
 
+- (void)layoutSubviews
+{
+    CGFloat width = 0.f;
+    CGFloat height = 0.f;
+    if (self.isFullScreen) {
+        width = CGRectGetHeight(self.superview.frame);
+        height = CGRectGetWidth(self.superview.frame);
+    } else {
+        width = CGRectGetWidth(self.superview.frame);
+        height = CGRectGetHeight(self.superview.frame);
+    }
+    
+    CGRect topFrame = self.topPanel.frame;
+    topFrame.size.width = width;
+    self.topPanel.frame = topFrame;
+    
+    CGRect bottomFrame = self.bottomPanel.frame;
+    bottomFrame.size.width = width;
+    bottomFrame.origin.y = height - CGRectGetHeight(bottomFrame);
+    self.bottomPanel.frame = bottomFrame;
+    
+    CGRect zoomFrame = self.zoomButton.frame;
+    zoomFrame.origin.x = CGRectGetWidth(self.bottomPanel.frame) - CGRectGetWidth(zoomFrame);
+    self.zoomButton.frame = zoomFrame;
+}
+
 - (void)setupViews
 {
     UITapGestureRecognizer *singleTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHide)];
@@ -103,6 +129,7 @@
 - (void)zoom:(UIButton *)sender
 {
     sender.selected = !sender.selected;
+    [self.delegate transformScreen:sender.selected];
 }
 
 #pragma mark lazy load
@@ -140,10 +167,9 @@
 - (UILabel *)currentTimeLabel
 {
     if (!_currentTimeLabel) {
-        _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 100 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
+        _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame) + 10 * kScaleBaseForPhone6Radio, 0, 100 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
         _currentTimeLabel.text = @"00:00";
         _currentTimeLabel.textColor = [UIColor whiteColor];
-        _currentTimeLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _currentTimeLabel;
 }

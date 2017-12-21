@@ -12,5 +12,6 @@
 
 - (void)play;
 - (void)pause;
+- (void)transformScreen:(BOOL)isZoomUp;
 
 @end

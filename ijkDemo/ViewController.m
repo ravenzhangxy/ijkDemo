@@ -32,11 +32,17 @@
     [self.view addSubview:self.playerView];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.playerView prepareToPlay];
     [self.playerView installMovieNotificationObservers];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
