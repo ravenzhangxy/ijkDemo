@@ -36,6 +36,7 @@
 		97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */; };
 		97200A0B1FE2905B003CAEE5 /* challenge_videoPause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */; };
 		97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */; };
+		97D50D171FECE36D00EFEC4B /* challenge_videoBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -89,6 +90,7 @@
 		97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoMiniScreen@2x.png"; sourceTree = "<group>"; };
 		97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoPause@2x.png"; sourceTree = "<group>"; };
 		97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoAllScreen@2x.png"; sourceTree = "<group>"; };
+		97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoBack@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */,
 				97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */,
 				97200A051FE29059003CAEE5 /* challenge_videoPlay@2x.png */,
+				97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */,
 				972009F61FE28583003CAEE5 /* Player */,
 				972009871FDE9E06003CAEE5 /* RootViewController.h */,
 				972009881FDE9E06003CAEE5 /* RootViewController.m */,
@@ -251,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */,
+				97D50D171FECE36D00EFEC4B /* challenge_videoBack@2x.png in Resources */,
 				972009591FDE972B003CAEE5 /* LaunchScreen.storyboard in Resources */,
 				972009561FDE972B003CAEE5 /* Assets.xcassets in Resources */,
 				97200A0B1FE2905B003CAEE5 /* challenge_videoPause@2x.png in Resources */,

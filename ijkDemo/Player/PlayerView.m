@@ -117,8 +117,7 @@
         if (isZoomUp) {
             weakSelf.controlView.fullScreen = YES;
             newTransform = CGAffineTransformMakeScale(1/x, 1/y);
-        }
-        else {
+        } else {
             weakSelf.controlView.fullScreen = NO;
             newTransform = CGAffineTransformMakeScale(1, 1);
         }
@@ -241,6 +240,10 @@
     {
         case IJKMPMoviePlaybackStateStopped: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            [self.controlView playOrPause];//视频播完时将按钮状态置为暂停状态
+//            if () {
+//
+//            }
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
