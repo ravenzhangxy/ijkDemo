@@ -23,8 +23,7 @@
 @property (nonatomic, strong) UIButton *pauseButton;
 @property (nonatomic, strong) UIButton *zoomButton;
 
-@property (nonatomic, strong) UILabel *currentTimeLabel;
-@property (nonatomic, strong) UILabel *totalDurationLabel;
+@property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
 
 @property(nonatomic, assign) BOOL isShowControl;
@@ -69,6 +68,14 @@
     CGRect zoomFrame = self.zoomButton.frame;
     zoomFrame.origin.x = CGRectGetWidth(self.bottomPanel.frame) - CGRectGetWidth(zoomFrame);
     self.zoomButton.frame = zoomFrame;
+    
+    [self.timeLabel sizeToFit];
+    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, CGRectGetHeight(self.bottomPanel.frame) / 2.0);
+    
+    CGRect sliderFrame = self.progressSlider.frame;
+    sliderFrame.origin.x = CGRectGetMaxX(self.timeLabel.frame) + 10;
+    sliderFrame.size.width = CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_timeLabel.frame) - CGRectGetWidth(_zoomButton.frame) - 10;
+    self.progressSlider.frame = sliderFrame;
 }
 
 - (void)setupViews
@@ -88,7 +95,7 @@
     [self.topPanel addSubview:self.titleLabel];
     
     [self.bottomPanel addSubview:self.playButton];
-    [self.bottomPanel addSubview:self.currentTimeLabel];
+    [self.bottomPanel addSubview:self.timeLabel];
     [self.bottomPanel addSubview:self.zoomButton];
     [self.bottomPanel addSubview:self.progressSlider];
     
@@ -144,6 +151,31 @@
     [self.delegate transformScreen:sender.selected];
 }
 
+- (void)sliderValueChanged:(UISlider *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(seekToSliderValue:)]) {
+        [self.delegate seekToSliderValue:sender.value];
+    }
+}
+
+- (void)sliderCanceled
+{
+    if ([self.delegate respondsToSelector:@selector(play)]) {
+        [self.delegate play];
+        self.isPlay = YES;
+        self.playButton.selected = NO;
+    }
+}
+
+- (void)refreshProgress:(NSTimeInterval)totalDuration currentTime:(NSTimeInterval)currentTime
+{
+    self.progressSlider.maximumValue = totalDuration;
+    self.progressSlider.value = currentTime;
+    NSString *total = [NSString stringWithFormat:@"%02d:%02d", (int)((int)totalDuration / 60), (int)((int)totalDuration % 60)];
+    NSString *current = [NSString stringWithFormat:@"%02d:%02d", (int)((int)currentTime / 60), (int)((int)currentTime % 60)];
+    self.timeLabel.text = [NSString stringWithFormat:@"%@/%@", current, total];
+}
+
 #pragma mark lazy load
 - (UIView *)topPanel
 {
@@ -175,14 +207,15 @@
     return _playButton;
 }
 
-- (UILabel *)currentTimeLabel
+- (UILabel *)timeLabel
 {
-    if (!_currentTimeLabel) {
-        _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 100 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
-        _currentTimeLabel.text = @"00:00";
-        _currentTimeLabel.textColor = [UIColor whiteColor];
+    if (!_timeLabel) {
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 100 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
+        _timeLabel.text = @"00:00/00:00";
+        _timeLabel.textColor = [UIColor whiteColor];
+        _timeLabel.font = [UIFont systemFontOfSize:13];
     }
-    return _currentTimeLabel;
+    return _timeLabel;
 }
 
 - (UIButton *)zoomButton
@@ -221,13 +254,15 @@
 - (UISlider *)progressSlider
 {
     if (!_progressSlider) {
-        _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_currentTimeLabel.frame), 0, CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_currentTimeLabel.frame) - CGRectGetWidth(_zoomButton.frame), CGRectGetHeight(_bottomPanel.frame))];
+        _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_timeLabel.frame) + 10, 0, CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_timeLabel.frame) - CGRectGetWidth(_zoomButton.frame) - 10, CGRectGetHeight(_bottomPanel.frame))];
         _progressSlider.center = CGPointMake(_progressSlider.center.x, CGRectGetHeight(_bottomPanel.frame) / 2);
         _progressSlider.minimumTrackTintColor = [UIColor blueColor];
         _progressSlider.maximumTrackTintColor = [UIColor whiteColor];
         UIImage *thumbImg = [self getImageFromColor:[UIColor whiteColor] size:CGSizeMake(10, 10)];
         [_progressSlider setThumbImage:thumbImg forState:UIControlStateNormal];
         [_progressSlider setThumbImage:thumbImg forState:UIControlStateHighlighted];
+        [_progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+        [_progressSlider addTarget:self action:@selector(sliderCanceled) forControlEvents:UIControlEventTouchDragExit | UIControlEventTouchCancel | UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     }
     return _progressSlider;
 }

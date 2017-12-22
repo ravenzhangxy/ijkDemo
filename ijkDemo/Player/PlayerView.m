@@ -15,6 +15,7 @@
 @property (atomic, retain) id<IJKMediaPlayback> player;
 @property (nonatomic, strong) PlayerControlView *controlView;
 @property (nonatomic, assign) CGRect originFrame;
+@property (nonatomic, strong) NSTimer *timer;
 
 @end
 
@@ -36,6 +37,7 @@
         self.originFrame = frame;
         [self initIJKPlayer:videoUrl];
         [self initControlView];
+        
     }
     return self;
 }
@@ -140,6 +142,12 @@
     [self layoutIfNeeded];
 }
 
+- (void)seekToSliderValue:(NSTimeInterval)time
+{
+    [self.controlView refreshProgress:self.player.duration currentTime:time];
+    self.player.currentPlaybackTime = time;
+}
+
 #pragma mark Install Movie Notifications
 
 /* Register observers for the various movie object notifications. */
@@ -225,6 +233,7 @@
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
+    [self.controlView refreshProgress:self.player.duration currentTime:self.player.currentPlaybackTime];
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
@@ -241,9 +250,6 @@
         case IJKMPMoviePlaybackStateStopped: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             [self.controlView playOrPause];//视频播完时将按钮状态置为暂停状态
-//            if () {
-//
-//            }
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {

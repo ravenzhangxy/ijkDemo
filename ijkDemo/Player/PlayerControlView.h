@@ -13,7 +13,9 @@
 
 @property (nonatomic, weak) id<PlayerDelegate>delegate;
 @property (nonatomic, getter=isFullScreen) BOOL fullScreen;
+@property (nonatomic, assign) NSTimeInterval totalTime;
 
 - (void)playOrPause;
+- (void)refreshProgress:(NSTimeInterval)totalDuration currentTime:(NSTimeInterval)currentTime;
 
 @end
