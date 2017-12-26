@@ -37,7 +37,9 @@
         self.originFrame = frame;
         [self initIJKPlayer:videoUrl];
         [self initControlView];
-        
+        self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        [self.timer setFireDate:[NSDate distantFuture]];
     }
     return self;
 }
@@ -71,6 +73,11 @@
     self.controlView.delegate = self;
 }
 
+- (void)refreshControlView
+{
+    [self.controlView refreshProgress:self.player.duration currentTime:self.player.currentPlaybackTime];
+}
+
 #pragma mark Public Method
 - (void)prepareToPlay
 {
@@ -93,7 +100,7 @@
     [self.player pause];
 }
 
-- (void)transformScreen:(BOOL)isZoomUp
+- (void)transformFullScreen:(BOOL)isZoomUp
 {
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     CGFloat x = screenSize.height/self.frame.size.width;
@@ -205,9 +212,6 @@
 
 - (void)moviePlayBackDidFinish:(NSNotification*)notification
 {
-    //    MPMovieFinishReasonPlaybackEnded,
-    //    MPMovieFinishReasonPlaybackError,
-    //    MPMovieFinishReasonUserExited
     int reason = [[[notification userInfo] valueForKey:IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
     
     switch (reason)
@@ -234,22 +238,17 @@
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
     [self.controlView refreshProgress:self.player.duration currentTime:self.player.currentPlaybackTime];
+    [self.timer setFireDate:[NSDate distantPast]];
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
 {
-    //    MPMoviePlaybackStateStopped,
-    //    MPMoviePlaybackStatePlaying,
-    //    MPMoviePlaybackStatePaused,
-    //    MPMoviePlaybackStateInterrupted,
-    //    MPMoviePlaybackStateSeekingForward,
-    //    MPMoviePlaybackStateSeekingBackward
-    
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             [self.controlView playOrPause];//视频播完时将按钮状态置为暂停状态
+            [self transformFullScreen:NO];
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {

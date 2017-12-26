@@ -148,7 +148,7 @@
 - (void)zoom:(UIButton *)sender
 {
     sender.selected = !sender.selected;
-    [self.delegate transformScreen:sender.selected];
+    [self.delegate transformFullScreen:sender.selected];
 }
 
 - (void)sliderValueChanged:(UISlider *)sender

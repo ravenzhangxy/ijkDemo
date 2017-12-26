@@ -12,7 +12,7 @@
 
 - (void)play;
 - (void)pause;
-- (void)transformScreen:(BOOL)isZoomUp;
+- (void)transformFullScreen:(BOOL)isZoomUp;
 - (void)seekToSliderValue:(NSTimeInterval)time;
 
 @end
