@@ -16,6 +16,7 @@
 @property (nonatomic, assign) NSTimeInterval totalTime;
 
 - (void)playOrPause;
-- (void)refreshProgress:(NSTimeInterval)totalDuration currentTime:(NSTimeInterval)currentTime;
+- (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
+- (void)refreshProgress:(NSTimeInterval)currentTime;
 
 @end

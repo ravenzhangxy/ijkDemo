@@ -26,8 +26,9 @@
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
 
-@property(nonatomic, assign) BOOL isShowControl;
-@property(nonatomic, assign) BOOL isPlay;
+@property (nonatomic, assign) BOOL isShowControl;
+@property (nonatomic, assign) BOOL isPlay;
+@property (nonatomic, assign) NSTimeInterval totalDuration;
 
 @end
 
@@ -167,12 +168,17 @@
     }
 }
 
-- (void)refreshProgress:(NSTimeInterval)totalDuration currentTime:(NSTimeInterval)currentTime
+- (void)refreshTotalDuration:(NSTimeInterval)totalDuration
 {
     self.progressSlider.maximumValue = totalDuration;
+    self.totalDuration = totalDuration;
+}
+
+- (void)refreshProgress:(NSTimeInterval)currentTime
+{
     self.progressSlider.value = currentTime;
-    NSString *total = [NSString stringWithFormat:@"%02d:%02d", (int)((int)totalDuration / 60), (int)((int)totalDuration % 60)];
     NSString *current = [NSString stringWithFormat:@"%02d:%02d", (int)((int)currentTime / 60), (int)((int)currentTime % 60)];
+    NSString *total = [NSString stringWithFormat:@"%02d:%02d", (int)((int)self.totalDuration / 60), (int)((int)self.totalDuration % 60)];
     self.timeLabel.text = [NSString stringWithFormat:@"%@/%@", current, total];
 }
 

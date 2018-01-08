@@ -16,6 +16,7 @@
 @property (nonatomic, strong) PlayerControlView *controlView;
 @property (nonatomic, assign) CGRect originFrame;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) NSInteger time;
 
 @end
 
@@ -40,6 +41,7 @@
         self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
         [self.timer setFireDate:[NSDate distantFuture]];
+        self.time = 0;
     }
     return self;
 }
@@ -75,7 +77,11 @@
 
 - (void)refreshControlView
 {
-    [self.controlView refreshProgress:self.player.duration currentTime:self.player.currentPlaybackTime];
+    self.time ++;
+    if (self.time > self.player.duration) {
+        self.time = self.player.duration;
+    }
+    [self.controlView refreshProgress:self.time];
 }
 
 #pragma mark Public Method
@@ -151,8 +157,9 @@
 
 - (void)seekToSliderValue:(NSTimeInterval)time
 {
-    [self.controlView refreshProgress:self.player.duration currentTime:time];
+    [self.controlView refreshProgress:time];
     self.player.currentPlaybackTime = time;
+    self.time = time;
 }
 
 #pragma mark Install Movie Notifications
@@ -237,7 +244,8 @@
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
-    [self.controlView refreshProgress:self.player.duration currentTime:self.player.currentPlaybackTime];
+    [self.controlView refreshTotalDuration:self.player.duration];
+    [self.controlView refreshProgress:self.player.currentPlaybackTime];
     [self.timer setFireDate:[NSDate distantPast]];
 }
 
@@ -249,14 +257,18 @@
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             [self.controlView playOrPause];//视频播完时将按钮状态置为暂停状态
             [self transformFullScreen:NO];
+            [self.timer setFireDate:[NSDate distantFuture]];
+            self.time = 0;
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            [self.timer setFireDate:[NSDate distantPast]];
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            [self.timer setFireDate:[NSDate distantFuture]];
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
@@ -273,6 +285,13 @@
             break;
         }
     }
+}
+
+- (void)dealloc
+{
+    [self.timer invalidate];
+    self.timer = nil;
+    self.player = nil;
 }
 
 @end
