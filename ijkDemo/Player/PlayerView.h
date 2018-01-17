@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^backBlock)(void);
+
 @interface PlayerView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSString *)videoUrl;
+@property (nonatomic, copy) backBlock backBlock;
+
+- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSString *)videoUrl isFullScreen:(BOOL)isFullScreen;
 - (void)prepareToPlay;
 - (void)shutdown;
 - (void)installMovieNotificationObservers;

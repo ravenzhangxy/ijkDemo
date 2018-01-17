@@ -31,7 +31,7 @@
     self.controlView.frame = self.bounds;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSString *)videoUrl
+- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSString *)videoUrl isFullScreen:(BOOL)isFullScreen
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -42,6 +42,7 @@
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
         [self.timer setFireDate:[NSDate distantFuture]];
         self.time = 0;
+        [self transformFullScreen:isFullScreen];
     }
     return self;
 }
@@ -59,7 +60,7 @@
     [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-    
+
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:videoUrl] withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.player.view.frame = self.bounds;
@@ -77,11 +78,11 @@
 
 - (void)refreshControlView
 {
-    self.time ++;
     if (self.time > self.player.duration) {
         self.time = self.player.duration;
     }
     [self.controlView refreshProgress:self.time];
+    self.time ++;
 }
 
 #pragma mark Public Method
@@ -104,6 +105,13 @@
 - (void)pause
 {
     [self.player pause];
+}
+
+- (void)back
+{
+    if (self.backBlock) {
+        self.backBlock();
+    }
 }
 
 - (void)transformFullScreen:(BOOL)isZoomUp
@@ -246,7 +254,6 @@
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
     [self.controlView refreshTotalDuration:self.player.duration];
     [self.controlView refreshProgress:self.player.currentPlaybackTime];
-    [self.timer setFireDate:[NSDate distantPast]];
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification

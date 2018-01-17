@@ -11,6 +11,11 @@
 #define kFixedScreenWidth    ( [[UIScreen mainScreen] respondsToSelector:@selector(fixedCoordinateSpace)] ? [UIScreen mainScreen].fixedCoordinateSpace.bounds.size.width : [UIScreen mainScreen].bounds.size.width )
 #define kScaleBaseForPhone6Radio (kFixedScreenWidth/375.0)
 
+typedef NS_ENUM(NSUInteger, PanDirection) {
+    PanDirectionHorizon = 0,
+    PanDirectionVertical
+};
+
 @interface PlayerControlView ()
 
 @property (nonatomic, strong) UIView *topPanel;
@@ -29,6 +34,8 @@
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
 @property (nonatomic, assign) NSTimeInterval totalDuration;
+@property (nonatomic, assign) PanDirection panDirection;
+@property (nonatomic, assign) CGFloat panMoveDuration;
 
 @end
 
@@ -52,9 +59,11 @@
     if (self.isFullScreen) {
         width = CGRectGetHeight(self.superview.frame);
         height = CGRectGetWidth(self.superview.frame);
+        self.zoomButton.selected = YES;
     } else {
         width = CGRectGetWidth(self.superview.frame);
         height = CGRectGetHeight(self.superview.frame);
+        self.zoomButton.selected = NO;
     }
     
     CGRect topFrame = self.topPanel.frame;
@@ -89,6 +98,9 @@
     doubleTapGR.numberOfTapsRequired = 2;
     [self addGestureRecognizer:doubleTapGR];
     
+    UIPanGestureRecognizer *panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureAction:)];
+    [self addGestureRecognizer:panGR];
+    
     [self addSubview:self.topPanel];
     [self addSubview:self.bottomPanel];
     
@@ -106,6 +118,11 @@
 }
 
 #pragma mark Event
+- (void)back
+{
+    [self.delegate back];
+}
+
 - (void)showOrHide
 {
     self.isShowControl = !self.isShowControl;
@@ -182,6 +199,89 @@
     self.timeLabel.text = [NSString stringWithFormat:@"%@/%@", current, total];
 }
 
+- (void)panGestureAction:(UIPanGestureRecognizer *)pan
+{
+    //根据在view上Pan的位置，确定是调音量还是亮度
+    CGPoint locationPoint = [pan locationInView:self];
+    
+    // 我们要响应水平移动和垂直移动
+    // 根据上次和本次移动的位置，算出一个速率的point
+    CGPoint velocityPoint = [pan velocityInView:self];
+    
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:
+        {
+            // 使用绝对值来判断移动的方向
+            CGFloat x = fabs(velocityPoint.x);
+            CGFloat y = fabs(velocityPoint.y);
+            if (x > y) { // 水平移动
+                self.panDirection = PanDirectionHorizon;
+            } else { // 垂直运动
+                self.panDirection = PanDirectionVertical;
+                // 开始滑动的时候,状态改为正在控制音量
+                if (locationPoint.x > self.bounds.size.width / 2) { // 音量调节
+                    
+                } else { // 亮度调节
+                    
+                }
+            }
+            break;
+        }
+        case UIGestureRecognizerStateChanged:
+        {
+            switch (self.panDirection) {
+                case PanDirectionHorizon:{
+                    // 水平移动的方法只要x方向的值
+                    [self panTimeChange:velocityPoint.x];
+                    break;
+                }
+                case PanDirectionVertical:{
+                    // 垂直移动方法只要y方向的值
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case UIGestureRecognizerStateEnded:
+        {
+            // 移动结束也需要判断垂直或者平移
+            // 比如水平移动结束时，要快进到指定位置，如果这里没有判断，当我们调节音量完之后，会出现屏幕跳动的bug
+            switch (self.panDirection) {
+                case PanDirectionHorizon:{
+                    [self.delegate seekToSliderValue:self.panMoveDuration];
+                    self.panMoveDuration = 0;
+                    break;
+                }
+                case PanDirectionVertical:{
+                    // 垂直移动结束后，把状态改为不再控制音量
+//                    self.isVolume = NO;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case UIGestureRecognizerStateCancelled:
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)panTimeChange:(CGFloat)value
+{
+    self.panMoveDuration += value / 300;
+    if (self.panMoveDuration > self.totalDuration) {
+        self.panMoveDuration = self.totalDuration;
+    }
+    if (self.panMoveDuration < 0) {
+        self.panMoveDuration = 0;
+    }
+}
+
 #pragma mark lazy load
 - (UIView *)topPanel
 {
@@ -242,7 +342,7 @@
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(0, 0, CGRectGetHeight(_topPanel.frame), CGRectGetHeight(_topPanel.frame));
         [_backButton setImage:[UIImage imageNamed:@"challenge_videoBack"] forState:UIControlStateNormal];
-//        [_backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+        [_backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
 }
