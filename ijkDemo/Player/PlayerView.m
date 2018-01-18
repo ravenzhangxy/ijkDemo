@@ -63,7 +63,7 @@
     [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-    [options setPlayerOptionIntValue:10 forKey:@"framedrop"];
+    [options setPlayerOptionIntValue:5 forKey:@"framedrop"];
 
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:videoUrl] withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;

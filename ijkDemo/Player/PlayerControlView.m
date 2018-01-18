@@ -131,6 +131,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
             self.topPanel.hidden = NO;
             self.bottomPanel.hidden = NO;
         }];
+        [self performSelector:@selector(showOrHide) withObject:nil afterDelay:3.5];
     } else {
         [UIView animateWithDuration:0.3 animations:^{
             self.topPanel.hidden = YES;
@@ -316,7 +317,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 - (UILabel *)timeLabel
 {
     if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 100 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 120 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
         _timeLabel.text = @"00:00/00:00";
         _timeLabel.textColor = [UIColor whiteColor];
         _timeLabel.font = [UIFont systemFontOfSize:13];
