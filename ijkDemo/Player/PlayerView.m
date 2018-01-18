@@ -35,6 +35,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor blackColor];
         self.originFrame = frame;
         [self initIJKPlayer:videoUrl];
         [self initControlView];
@@ -43,6 +44,8 @@
         [self.timer setFireDate:[NSDate distantFuture]];
         self.time = 0;
         [self transformFullScreen:isFullScreen];
+//        [self.player prepareToPlay];
+//        [self installMovieNotificationObservers];
     }
     return self;
 }
@@ -60,6 +63,7 @@
     [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+    [options setPlayerOptionIntValue:10 forKey:@"framedrop"];
 
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:videoUrl] withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
