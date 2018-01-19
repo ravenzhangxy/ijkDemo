@@ -28,9 +28,9 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.playerView = [[PlayerView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) videoUrl:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia2.mp4" isFullScreen:YES];
+    self.playerView = [[PlayerView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) videoUrl:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia2.mp4" isFullScreen:NO];
     __weak typeof(self) weakSelf = self;
-    self.playerView.backBlock = ^{
+    self.playerView.closeBlock = ^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };
     [self.view addSubview:self.playerView];
@@ -44,8 +44,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.playerView prepareToPlay];
-    [self.playerView installMovieNotificationObservers];
+//    [self.playerView prepareToPlay];
+//    [self.playerView installMovieNotificationObservers];
     self.navigationController.navigationBarHidden = YES;
 }
 

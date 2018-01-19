@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^backBlock)(void);
+typedef void(^closeBlock)(void);
 
 @interface PlayerView : UIView
 
-@property (nonatomic, copy) backBlock backBlock;
+@property (nonatomic, copy) closeBlock closeBlock;
 
 - (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSString *)videoUrl isFullScreen:(BOOL)isFullScreen;
 - (void)prepareToPlay;

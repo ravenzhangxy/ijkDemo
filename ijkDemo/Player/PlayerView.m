@@ -16,7 +16,6 @@
 @property (nonatomic, strong) PlayerControlView *controlView;
 @property (nonatomic, assign) CGRect originFrame;
 @property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic, assign) NSInteger time;
 
 @end
 
@@ -41,11 +40,9 @@
         [self initControlView];
         self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        [self.timer setFireDate:[NSDate distantFuture]];
-        self.time = 0;
         [self transformFullScreen:isFullScreen];
-//        [self.player prepareToPlay];
-//        [self installMovieNotificationObservers];
+        [self.player prepareToPlay];
+        [self installMovieNotificationObservers];
     }
     return self;
 }
@@ -63,7 +60,9 @@
     [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+//    [options setFormatOptionIntValue:1 forKey:@"analyzeduration"];
     [options setPlayerOptionIntValue:5 forKey:@"framedrop"];
+    [options setPlayerOptionIntValue:1 forKey:@"enable-accurate-seek"];
 
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:videoUrl] withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
@@ -82,11 +81,8 @@
 
 - (void)refreshControlView
 {
-    if (self.time > self.player.duration) {
-        self.time = self.player.duration;
-    }
-    [self.controlView refreshProgress:self.time];
-    self.time ++;
+    NSLog(@"=======================%@", @(self.player.currentPlaybackTime));
+    [self.controlView refreshProgress:self.player.currentPlaybackTime];
 }
 
 #pragma mark Public Method
@@ -113,8 +109,8 @@
 
 - (void)back
 {
-    if (self.backBlock) {
-        self.backBlock();
+    if (self.closeBlock) {
+        self.closeBlock();
     }
 }
 
@@ -171,7 +167,8 @@
 {
     [self.controlView refreshProgress:time];
     self.player.currentPlaybackTime = time;
-    self.time = time;
+    NSLog(@"----------------%@", @(time));
+    NSLog(@"++++++++++++++++%@", @(self.player.currentPlaybackTime));
 }
 
 #pragma mark Install Movie Notifications
@@ -268,18 +265,14 @@
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             [self.controlView playOrPause];//视频播完时将按钮状态置为暂停状态
             [self transformFullScreen:NO];
-            [self.timer setFireDate:[NSDate distantFuture]];
-            self.time = 0;
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
-            [self.timer setFireDate:[NSDate distantPast]];
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
-            [self.timer setFireDate:[NSDate distantFuture]];
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {

@@ -27,9 +27,11 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UIButton *pauseButton;
 @property (nonatomic, strong) UIButton *zoomButton;
-
+//progress
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
+//hud
+
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
@@ -80,6 +82,9 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     self.zoomButton.frame = zoomFrame;
     
     [self.timeLabel sizeToFit];
+    CGRect timeLabelFrame = self.timeLabel.frame;
+    timeLabelFrame.size.width += 5;
+    self.timeLabel.frame = timeLabelFrame;
     self.timeLabel.center = CGPointMake(self.timeLabel.center.x, CGRectGetHeight(self.bottomPanel.frame) / 2.0);
     
     CGRect sliderFrame = self.progressSlider.frame;
@@ -251,13 +256,12 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
             // 比如水平移动结束时，要快进到指定位置，如果这里没有判断，当我们调节音量完之后，会出现屏幕跳动的bug
             switch (self.panDirection) {
                 case PanDirectionHorizon:{
-                    [self.delegate seekToSliderValue:self.panMoveDuration];
+                    [self.delegate seekToSliderValue:self.progressSlider.value + self.panMoveDuration];
                     self.panMoveDuration = 0;
                     break;
                 }
                 case PanDirectionVertical:{
-                    // 垂直移动结束后，把状态改为不再控制音量
-//                    self.isVolume = NO;
+                    
                     break;
                 }
                 default:
@@ -275,12 +279,17 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 - (void)panTimeChange:(CGFloat)value
 {
     self.panMoveDuration += value / 300;
-    if (self.panMoveDuration > self.totalDuration) {
-        self.panMoveDuration = self.totalDuration;
+    if (self.panMoveDuration > self.totalDuration - self.progressSlider.value) {
+        self.panMoveDuration = self.totalDuration - self.progressSlider.value;
     }
-    if (self.panMoveDuration < 0) {
-        self.panMoveDuration = 0;
+    if (self.panMoveDuration < - self.progressSlider.value) {
+        self.panMoveDuration = - self.progressSlider.value;
     }
+}
+
+- (void)setVedioTitle:(NSString *)vedioTitle
+{
+    _titleLabel.text = vedioTitle;
 }
 
 #pragma mark lazy load
@@ -317,7 +326,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 - (UILabel *)timeLabel
 {
     if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 120 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_playButton.frame), 0, 100 * kScaleBaseForPhone6Radio, CGRectGetHeight(_bottomPanel.frame))];
         _timeLabel.text = @"00:00/00:00";
         _timeLabel.textColor = [UIColor whiteColor];
         _timeLabel.font = [UIFont systemFontOfSize:13];
@@ -369,7 +378,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
         [_progressSlider setThumbImage:thumbImg forState:UIControlStateNormal];
         [_progressSlider setThumbImage:thumbImg forState:UIControlStateHighlighted];
         [_progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-        [_progressSlider addTarget:self action:@selector(sliderCanceled) forControlEvents:UIControlEventTouchDragExit | UIControlEventTouchCancel | UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+        [_progressSlider addTarget:self action:@selector(sliderCanceled) forControlEvents:UIControlEventTouchDragExit | UIControlEventTouchCancel | UIControlEventTouchUpOutside | UIControlEventTouchUpInside];
     }
     return _progressSlider;
 }
@@ -393,3 +402,5 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 }
 
 @end
+
+
