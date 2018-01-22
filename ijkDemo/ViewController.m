@@ -28,7 +28,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.playerView = [[PlayerView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) videoUrl:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia2.mp4" isFullScreen:NO];
+    self.playerView = [[PlayerView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) videoUrl:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia2.mp4" isFullScreen:YES];
     __weak typeof(self) weakSelf = self;
     self.playerView.closeBlock = ^{
         [weakSelf.navigationController popViewControllerAnimated:YES];

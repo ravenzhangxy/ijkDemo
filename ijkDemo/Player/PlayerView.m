@@ -86,6 +86,7 @@
 {
     MBProgressHUD *hud = [[MBProgressHUD alloc] init];
     hud.mode = MBProgressHUDModeIndeterminate;
+    hud.removeFromSuperViewOnHide = YES;
     [self addSubview:hud];
     [hud showAnimated:YES];
     self.hud = hud;

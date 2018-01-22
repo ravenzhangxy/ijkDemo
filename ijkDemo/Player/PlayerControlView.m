@@ -7,7 +7,6 @@
 //
 
 #import "PlayerControlView.h"
-#import "MBProgressHUD.h"
 
 #define kFixedScreenWidth    ( [[UIScreen mainScreen] respondsToSelector:@selector(fixedCoordinateSpace)] ? [UIScreen mainScreen].fixedCoordinateSpace.bounds.size.width : [UIScreen mainScreen].bounds.size.width )
 #define kScaleBaseForPhone6Radio (kFixedScreenWidth/375.0)
@@ -32,6 +31,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
 //hud
+@property (nonatomic, strong) UILabel *seekLabel;
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
@@ -91,6 +91,8 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     sliderFrame.origin.x = CGRectGetMaxX(self.timeLabel.frame) + 10;
     sliderFrame.size.width = CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_timeLabel.frame) - CGRectGetWidth(_zoomButton.frame) - 10;
     self.progressSlider.frame = sliderFrame;
+    
+    self.seekLabel.center = CGPointMake(width / 2, height / 2);
 }
 
 - (void)setupViews
@@ -116,6 +118,8 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     [self.bottomPanel addSubview:self.timeLabel];
     [self.bottomPanel addSubview:self.zoomButton];
     [self.bottomPanel addSubview:self.progressSlider];
+    
+    [self addSubview:self.seekLabel];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self showOrHide];
@@ -258,6 +262,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
                 case PanDirectionHorizon:{
                     [self.delegate seekToSliderValue:self.progressSlider.value + self.panMoveDuration];
                     self.panMoveDuration = 0;
+                    self.seekLabel.hidden = YES;
                     break;
                 }
                 case PanDirectionVertical:{
@@ -279,12 +284,15 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 - (void)panTimeChange:(CGFloat)value
 {
     self.panMoveDuration += value / 300;
+    
     if (self.panMoveDuration > self.totalDuration - self.progressSlider.value) {
         self.panMoveDuration = self.totalDuration - self.progressSlider.value;
     }
     if (self.panMoveDuration < - self.progressSlider.value) {
         self.panMoveDuration = - self.progressSlider.value;
     }
+    self.seekLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(((int)self.progressSlider.value + (int)self.panMoveDuration) / 60), (int)(((int)self.progressSlider.value + (int)self.panMoveDuration) % 60)];
+    self.seekLabel.hidden = NO;
 }
 
 - (void)setVedioTitle:(NSString *)vedioTitle
@@ -381,6 +389,21 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
         [_progressSlider addTarget:self action:@selector(sliderCanceled) forControlEvents:UIControlEventTouchDragExit | UIControlEventTouchCancel | UIControlEventTouchUpOutside | UIControlEventTouchUpInside];
     }
     return _progressSlider;
+}
+
+- (UILabel *)seekLabel
+{
+    if (!_seekLabel) {
+        _seekLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150 * kScaleBaseForPhone6Radio, 80 * kScaleBaseForPhone6Radio)];
+        _seekLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+        _seekLabel.font = [UIFont systemFontOfSize:32];
+        _seekLabel.textColor = [UIColor whiteColor];
+        _seekLabel.textAlignment = NSTextAlignmentCenter;
+        _seekLabel.hidden = YES;
+        _seekLabel.layer.masksToBounds = YES;
+        _seekLabel.layer.cornerRadius = 10;
+    }
+    return _seekLabel;
 }
 
 //通过颜色来生成一个纯色图片
