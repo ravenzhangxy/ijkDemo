@@ -7,6 +7,7 @@
 //
 
 #import "PlayerControlView.h"
+#import "MBProgressHUD.h"
 
 #define kFixedScreenWidth    ( [[UIScreen mainScreen] respondsToSelector:@selector(fixedCoordinateSpace)] ? [UIScreen mainScreen].fixedCoordinateSpace.bounds.size.width : [UIScreen mainScreen].bounds.size.width )
 #define kScaleBaseForPhone6Radio (kFixedScreenWidth/375.0)
@@ -31,7 +32,6 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
 //hud
-
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;

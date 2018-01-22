@@ -9,6 +9,7 @@
 #import "PlayerView.h"
 #import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
 #import "PlayerControlView.h"
+#import "MBProgressHUD.h"
 
 @interface PlayerView()<PlayerDelegate>
 
@@ -16,6 +17,7 @@
 @property (nonatomic, strong) PlayerControlView *controlView;
 @property (nonatomic, assign) CGRect originFrame;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -38,6 +40,7 @@
         self.originFrame = frame;
         [self initIJKPlayer:videoUrl];
         [self initControlView];
+        [self initHud];
         self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
         [self transformFullScreen:isFullScreen];
@@ -46,7 +49,7 @@
     }
     return self;
 }
-
+#pragma mark init views
 - (void)initIJKPlayer:(NSString *)videoUrl
 {
 #ifdef DEBUG
@@ -61,7 +64,7 @@
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
 //    [options setFormatOptionIntValue:1 forKey:@"analyzeduration"];
-    [options setPlayerOptionIntValue:5 forKey:@"framedrop"];
+//    [options setPlayerOptionIntValue:5 forKey:@"framedrop"];
     [options setPlayerOptionIntValue:1 forKey:@"enable-accurate-seek"];
 
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:videoUrl] withOptions:options];
@@ -79,9 +82,17 @@
     self.controlView.delegate = self;
 }
 
+- (void)initHud
+{
+    MBProgressHUD *hud = [[MBProgressHUD alloc] init];
+    hud.mode = MBProgressHUDModeIndeterminate;
+    [self addSubview:hud];
+    [hud showAnimated:YES];
+    self.hud = hud;
+}
+#pragma mark timer event
 - (void)refreshControlView
 {
-    NSLog(@"=======================%@", @(self.player.currentPlaybackTime));
     [self.controlView refreshProgress:self.player.currentPlaybackTime];
 }
 
@@ -167,8 +178,6 @@
 {
     [self.controlView refreshProgress:time];
     self.player.currentPlaybackTime = time;
-    NSLog(@"----------------%@", @(time));
-    NSLog(@"++++++++++++++++%@", @(self.player.currentPlaybackTime));
 }
 
 #pragma mark Install Movie Notifications
@@ -255,6 +264,7 @@
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
     [self.controlView refreshTotalDuration:self.player.duration];
     [self.controlView refreshProgress:self.player.currentPlaybackTime];
+    [self.hud hideAnimated:YES];
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification

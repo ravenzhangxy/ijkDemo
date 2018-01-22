@@ -36,6 +36,7 @@
 		97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */; };
 		97200A0B1FE2905B003CAEE5 /* challenge_videoPause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */; };
 		97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */; };
+		972595ED20120D0700F50F31 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 972595EB20120D0600F50F31 /* MBProgressHUD.m */; };
 		97D50D171FECE36D00EFEC4B /* challenge_videoBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -90,6 +91,8 @@
 		97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoMiniScreen@2x.png"; sourceTree = "<group>"; };
 		97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoPause@2x.png"; sourceTree = "<group>"; };
 		97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoAllScreen@2x.png"; sourceTree = "<group>"; };
+		972595EB20120D0600F50F31 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		972595EC20120D0700F50F31 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoBack@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,6 +187,7 @@
 		972009F61FE28583003CAEE5 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				972595EA20120CE100F50F31 /* ThirdParty */,
 				972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */,
 				972009F71FE285C0003CAEE5 /* PlayerControlView.h */,
 				972009F91FE285C0003CAEE5 /* PlayerControlView.m */,
@@ -192,6 +196,15 @@
 				972009FB1FE285C0003CAEE5 /* PlayerView.m */,
 			);
 			path = Player;
+			sourceTree = "<group>";
+		};
+		972595EA20120CE100F50F31 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				972595EC20120D0700F50F31 /* MBProgressHUD.h */,
+				972595EB20120D0600F50F31 /* MBProgressHUD.m */,
+			);
+			path = ThirdParty;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +290,7 @@
 				9720095C1FDE972C003CAEE5 /* main.m in Sources */,
 				972009891FDE9E06003CAEE5 /* RootViewController.m in Sources */,
 				9720094E1FDE972B003CAEE5 /* AppDelegate.m in Sources */,
+				972595ED20120D0700F50F31 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
