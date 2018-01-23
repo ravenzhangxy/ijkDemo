@@ -60,7 +60,12 @@
 - (void)shutdown
 {
     [super shutdown];
+    [self.player pause];
     [self.player removeTimeObserver:self.timeObserver];
+    self.player = nil;
+    self.playerItem = nil;
+    [self.playerViewLayer removeFromSuperlayer];
+    self.playerViewLayer = nil;
 }
 
 #pragma mark private
