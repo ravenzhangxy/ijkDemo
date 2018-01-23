@@ -17,7 +17,7 @@ typedef void(^playFinishBlock)(KBMovieFinishReason reason);
 @property (nonatomic, copy) backActionBlock backActionBlock;
 @property (nonatomic, copy) playFinishBlock playFinishBlock;
 
-- (instancetype)initWithFrame:(CGRect)frame playerType:(KBPlayerType)playerType url:(NSURL *)url fullScreen:(BOOL)isfullScreen;
+- (instancetype)initWithFrame:(CGRect)frame playerType:(KBPlayerType)playerType url:(NSURL *)url title:(NSString *)title fullScreen:(BOOL)isfullScreen;
 - (void)shutdown;
 
 @end

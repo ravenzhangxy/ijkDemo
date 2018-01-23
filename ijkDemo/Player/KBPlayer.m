@@ -28,13 +28,13 @@
     self.controlView.frame = self.bounds;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame playerType:(KBPlayerType)playerType url:(NSURL *)url fullScreen:(BOOL)isfullScreen
+- (instancetype)initWithFrame:(CGRect)frame playerType:(KBPlayerType)playerType url:(NSURL *)url title:(NSString *)title fullScreen:(BOOL)isfullScreen
 {
     if (self = [super initWithFrame:frame]) {
         self.originFrame = frame;
         self.backgroundColor = [UIColor blackColor];
         [self initPlayer:playerType url:url];
-        [self initControlView];
+        [self initControlView:title];
         [self transformFullScreen:isfullScreen];
     }
     return self;
@@ -53,9 +53,10 @@
     self.playerView.delegate = self;
 }
 
-- (void)initControlView
+- (void)initControlView:(NSString *)title
 {
     self.controlView = [[PlayerControlView alloc] initWithFrame:self.bounds];
+    self.controlView.vedioTitle = title;
     [self addSubview:self.controlView];
     self.controlView.delegate = self;
 }
