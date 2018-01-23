@@ -173,6 +173,12 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     }
 }
 
+- (void)stop
+{
+    self.isPlay = NO;
+    self.playButton.selected = YES;
+}
+
 - (void)zoom:(UIButton *)sender
 {
     sender.selected = !sender.selected;

@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "PlayerView.h"
+#import "KBPlayer.h"
 
 @interface ViewController ()
 
-@property (nonatomic, strong) PlayerView *playerView;
+@property (nonatomic, strong) KBPlayer *playerView;
 
 @end
 
@@ -28,11 +28,11 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.playerView = [[PlayerView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) videoUrl:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia2.mp4" isFullScreen:YES];
-    __weak typeof(self) weakSelf = self;
-    self.playerView.closeBlock = ^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    };
+    self.playerView = [[KBPlayer alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) playerType:KBPlayerTypeIJK url:[NSURL URLWithString:@"https://susuanqiniu.knowbox.cn/map_videos/introduction.flv"] fullScreen:NO];
+//    __weak typeof(self) weakSelf = self;
+//    self.playerView.closeBlock = ^{
+//        [weakSelf.navigationController popViewControllerAnimated:YES];
+//    };
     [self.view addSubview:self.playerView];
 }
 
@@ -44,15 +44,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.playerView prepareToPlay];
-//    [self.playerView installMovieNotificationObservers];
     self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.playerView shutdown];
-    [self.playerView removeMovieNotificationObservers];
 }
 
 - (void)didReceiveMemoryWarning {

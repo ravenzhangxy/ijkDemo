@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PlayerDelegate.h"
+#import "PlayerControlDelegate.h"
 
 @interface PlayerControlView : UIView
 
-@property (nonatomic, weak) id<PlayerDelegate>delegate;
+@property (nonatomic, weak) id<PlayerControlDelegate>delegate;
 @property (nonatomic, getter=isFullScreen) BOOL fullScreen;
 @property (nonatomic, assign) NSTimeInterval totalTime;
 @property (nonatomic, strong) NSString *vedioTitle;
 
-- (void)playOrPause;
+- (void)stop;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)refreshProgress:(NSTimeInterval)currentTime;
 
