@@ -40,6 +40,11 @@
     return self;
 }
 
+- (void)shutdown
+{
+    [self.playerView shutdown];
+}
+
 #pragma mark init views
 - (void)initPlayer:(KBPlayerType)playerType url:(NSURL *)url
 {
@@ -68,7 +73,10 @@
 
 - (void)back
 {
-
+    [self shutdown];
+    if (self.backActionBlock) {
+        self.backActionBlock();
+    }
 }
 
 - (void)transformFullScreen:(BOOL)isZoomUp
@@ -142,8 +150,6 @@
     switch (playbackState)
     {
         case KBPlaybackStateStopped: {
-            [self.controlView stop];//视频播完时将按钮状态置为暂停状态
-            [self transformFullScreen:NO];
             break;
         }
         case KBPlaybackStatePlaying: {
@@ -162,6 +168,26 @@
         default: {
             break;
         }
+    }
+}
+
+- (void)moviePlayBackDidFinish:(NSInteger)movieFinishReason
+{
+    switch (movieFinishReason) {
+        case KBMovieFinishReasonPlaybackEnded: {
+            [self.controlView stop];//视频播完时将按钮状态置为暂停状态
+            [self transformFullScreen:NO];
+            break;
+        }
+        case KBMovieFinishReasonUserExited:
+            break;
+        case KBMovieFinishReasonPlaybackError:
+            break;
+        default:
+            break;
+    }
+    if (self.playFinishBlock) {
+        self.playFinishBlock(movieFinishReason);
     }
 }
 

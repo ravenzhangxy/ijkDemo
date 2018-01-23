@@ -8,14 +8,12 @@
 
 #import "PlayerView.h"
 #import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
-#import "MBProgressHUD.h"
 
 @interface PlayerView()
 
 @property (nonatomic, assign) KBPlayerType playerType;
 @property (atomic, retain) id<IJKMediaPlayback> ijkPlayer;
 @property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -34,7 +32,6 @@
     if (self) {
         self.backgroundColor = [UIColor blackColor];
         [self initPlayer:playerType url:url];
-        [self initHud];
         self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
     }
@@ -87,15 +84,6 @@
     [self installMovieNotificationObservers];
 }
 
-- (void)initHud
-{
-    MBProgressHUD *hud = [[MBProgressHUD alloc] init];
-    hud.mode = MBProgressHUDModeIndeterminate;
-    hud.removeFromSuperViewOnHide = YES;
-    [self addSubview:hud];
-    [hud showAnimated:YES];
-    self.hud = hud;
-}
 #pragma mark timer event
 - (void)refreshControlView
 {
@@ -103,27 +91,16 @@
 }
 
 #pragma mark Public Method
-- (void)prepareToPlay
-{
-    [self.ijkPlayer prepareToPlay];
-}
-
-- (void)shutdown
-{
-    [self.ijkPlayer shutdown];
-}
-
 - (void)play
 {
     switch (self.playerType) {
         case KBPlayerTypeIJK:
-            
+            [self.ijkPlayer play];
             break;
             
         default:
             break;
     }
-    [self.ijkPlayer play];
 }
 
 - (void)pause
@@ -215,14 +192,20 @@
             NSLog(@"playbackPlayBackDidFinish: ???: %d\n", reason);
             break;
     }
+    if ([self.delegate respondsToSelector:@selector(moviePlayBackDidFinish:)]) {
+        [self.delegate moviePlayBackDidFinish:reason];
+    }
 }
 
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
-    [self.delegate refreshTotalDuration:self.ijkPlayer.duration];
-    [self.delegate refreshProgress:self.ijkPlayer.currentPlaybackTime];
-    [self.hud hideAnimated:YES];
+    if ([self.delegate respondsToSelector:@selector(refreshTotalDuration:)]) {
+        [self.delegate refreshTotalDuration:self.ijkPlayer.duration];
+    }
+    if ([self.delegate respondsToSelector:@selector(refreshProgress:)]) {
+        [self.delegate refreshProgress:self.ijkPlayer.currentPlaybackTime];
+    }
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
@@ -261,7 +244,7 @@
 }
 #pragma mark --- IJKPlayer END
 
-- (void)dealloc
+- (void)shutdown
 {
     [self.timer invalidate];
     self.timer = nil;

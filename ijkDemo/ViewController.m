@@ -28,11 +28,11 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.playerView = [[KBPlayer alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) playerType:KBPlayerTypeIJK url:[NSURL URLWithString:@"https://susuanqiniu.knowbox.cn/map_videos/introduction.flv"] fullScreen:NO];
-//    __weak typeof(self) weakSelf = self;
-//    self.playerView.closeBlock = ^{
-//        [weakSelf.navigationController popViewControllerAnimated:YES];
-//    };
+    self.playerView = [[KBPlayer alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) playerType:KBPlayerTypeIJK url:[NSURL URLWithString:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia2.mp4"] fullScreen:NO];
+    __weak typeof(self) weakSelf = self;
+    self.playerView.backActionBlock = ^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    };
     [self.view addSubview:self.playerView];
 }
 

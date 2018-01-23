@@ -24,4 +24,10 @@ typedef NS_ENUM(NSInteger, KBPlaybackState) {
     KBPlaybackStateSeekingBackward
 };
 
+typedef NS_ENUM(NSInteger, KBMovieFinishReason) {
+    KBMovieFinishReasonPlaybackEnded,
+    KBMovieFinishReasonPlaybackError,
+    KBMovieFinishReasonUserExited
+};
+
 #endif /* PlayerHeader_h */

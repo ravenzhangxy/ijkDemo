@@ -13,5 +13,6 @@
 - (void)refreshProgress:(NSTimeInterval)time;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)moviePlayBackStateDidChange:(NSInteger)playbackState;
+- (void)moviePlayBackDidFinish:(NSInteger)movieFinishReason;
 
 @end

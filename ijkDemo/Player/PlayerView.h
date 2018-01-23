@@ -10,16 +10,14 @@
 #import "PlayerHeader.h"
 #import "PlayerDelegate.h"
 
-typedef void(^closeBlock)(void);
-
 @interface PlayerView : UIView
 
-@property (nonatomic, copy) closeBlock closeBlock;
 @property (nonatomic, assign) NSTimeInterval currentPlaybackTime;
 @property (nonatomic, weak) id<PlayerDelegate>delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame playerType:(KBPlayerType)playerType url:(NSURL *)url;
 - (void)play;
 - (void)pause;
+- (void)shutdown;
 
 @end
