@@ -14,8 +14,9 @@
 
 @property (nonatomic, assign) NSTimeInterval currentPlaybackTime;
 @property (nonatomic, weak) id<PlayerDelegate>delegate;
+@property (nonatomic, assign) KBPlaybackState playState;
 
-- (instancetype)initWithFrame:(CGRect)frame playerType:(KBPlayerType)playerType url:(NSURL *)url;
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)url;
 - (void)play;
 - (void)pause;
 - (void)shutdown;

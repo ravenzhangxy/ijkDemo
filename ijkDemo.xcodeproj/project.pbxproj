@@ -37,6 +37,8 @@
 		97200A0B1FE2905B003CAEE5 /* challenge_videoPause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */; };
 		97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */; };
 		972AEFBB20170AFE000DB581 /* KBPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFBA20170AFE000DB581 /* KBPlayer.m */; };
+		972AEFDD20174ACA000DB581 /* IJKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFDC20174ACA000DB581 /* IJKPlayerView.m */; };
+		972AEFE020174FE8000DB581 /* AVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFDF20174FE8000DB581 /* AVPlayerView.m */; };
 		97D50D171FECE36D00EFEC4B /* challenge_videoBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +97,10 @@
 		972AEFBA20170AFE000DB581 /* KBPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KBPlayer.m; sourceTree = "<group>"; };
 		972AEFBC20171A7E000DB581 /* PlayerHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerHeader.h; sourceTree = "<group>"; };
 		972AEFBD20171F60000DB581 /* PlayerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerDelegate.h; sourceTree = "<group>"; };
+		972AEFDB20174ACA000DB581 /* IJKPlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IJKPlayerView.h; sourceTree = "<group>"; };
+		972AEFDC20174ACA000DB581 /* IJKPlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJKPlayerView.m; sourceTree = "<group>"; };
+		972AEFDE20174FE8000DB581 /* AVPlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVPlayerView.h; sourceTree = "<group>"; };
+		972AEFDF20174FE8000DB581 /* AVPlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVPlayerView.m; sourceTree = "<group>"; };
 		97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoBack@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,6 +200,10 @@
 				972AEFBA20170AFE000DB581 /* KBPlayer.m */,
 				972009F81FE285C0003CAEE5 /* PlayerView.h */,
 				972009FB1FE285C0003CAEE5 /* PlayerView.m */,
+				972AEFDB20174ACA000DB581 /* IJKPlayerView.h */,
+				972AEFDC20174ACA000DB581 /* IJKPlayerView.m */,
+				972AEFDE20174FE8000DB581 /* AVPlayerView.h */,
+				972AEFDF20174FE8000DB581 /* AVPlayerView.m */,
 				972009F71FE285C0003CAEE5 /* PlayerControlView.h */,
 				972009F91FE285C0003CAEE5 /* PlayerControlView.m */,
 				972009FC1FE285C0003CAEE5 /* PlayerControlDelegate.h */,
@@ -280,9 +290,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				972AEFDD20174ACA000DB581 /* IJKPlayerView.m in Sources */,
 				972009511FDE972B003CAEE5 /* ViewController.m in Sources */,
 				972009FF1FE285C0003CAEE5 /* PlayerView.m in Sources */,
 				972009FD1FE285C0003CAEE5 /* PlayerControlView.m in Sources */,
+				972AEFE020174FE8000DB581 /* AVPlayerView.m in Sources */,
 				9720095C1FDE972C003CAEE5 /* main.m in Sources */,
 				972009891FDE9E06003CAEE5 /* RootViewController.m in Sources */,
 				9720094E1FDE972B003CAEE5 /* AppDelegate.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import "KBPlayer.h"
 #import "PlayerView.h"
+#import "IJKPlayerView.h"
 #import "PlayerControlView.h"
 
 @interface KBPlayer () <PlayerControlDelegate, PlayerDelegate>
@@ -17,6 +18,7 @@
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) CGRect originFrame;
+@property (nonatomic, assign) KBPlayerType playerType;
 
 @end
 
@@ -48,7 +50,18 @@
 #pragma mark init views
 - (void)initPlayer:(KBPlayerType)playerType url:(NSURL *)url
 {
-    self.playerView = [[PlayerView alloc] initWithFrame:self.bounds playerType:playerType url:url];
+    self.playerType = playerType;
+    switch (playerType) {
+        case KBPlayerTypeIJK:
+        {
+            self.playerView = [[IJKPlayerView alloc] initWithFrame:self.bounds url:url];
+            break;
+        }
+        case KBPlayerTypeAVPlayer:
+            break;
+        default:
+            break;
+    }
     [self addSubview:self.playerView];
     self.playerView.delegate = self;
 }
@@ -148,6 +161,7 @@
 
 - (void)moviePlayBackStateDidChange:(NSInteger)playbackState
 {
+    self.playerView.playState = playbackState;
     switch (playbackState)
     {
         case KBPlaybackStateStopped: {
