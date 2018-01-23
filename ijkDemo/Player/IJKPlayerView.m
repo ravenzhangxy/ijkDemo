@@ -25,16 +25,6 @@
     self.ijkPlayer.scalingMode = IJKMPMovieScalingModeAspectFit;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)url
-{
-    if (self = [super initWithFrame:frame url:url]) {
-        [self initPlayer:url];
-        self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-    }
-    return self;
-}
-
 - (void)initPlayer:(NSURL *)url
 {
 #ifdef DEBUG
@@ -61,6 +51,8 @@
     
     [self.ijkPlayer prepareToPlay];
     [self installMovieNotificationObservers];
+    self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(refreshControlView) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
 
 #pragma mark override
@@ -83,9 +75,9 @@
     self.ijkPlayer = nil;
 }
 
-- (void)setCurrentPlaybackTime:(NSTimeInterval)currentPlaybackTime
+- (void)seekToTime:(NSTimeInterval)time
 {
-    _ijkPlayer.currentPlaybackTime = currentPlaybackTime;
+    self.ijkPlayer.currentPlaybackTime = time;
 }
 
 #pragma mark timer event

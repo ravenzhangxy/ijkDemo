@@ -19,11 +19,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor blackColor];
+        [self initPlayer:url];
     }
     return self;
 }
 
-#pragma mark Public Method
+- (void)initPlayer:(NSURL *)url
+{
+    
+}
+
 - (void)play
 {
     
@@ -34,15 +39,14 @@
     
 }
 
-#pragma mark setter
-- (void)setCurrentPlaybackTime:(NSTimeInterval)currentPlaybackTime
+- (void)seekToTime:(NSTimeInterval)time
 {
     
 }
 
 - (void)shutdown
 {
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

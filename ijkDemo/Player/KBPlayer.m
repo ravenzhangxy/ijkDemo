@@ -7,8 +7,8 @@
 //
 
 #import "KBPlayer.h"
-#import "PlayerView.h"
 #import "IJKPlayerView.h"
+#import "AVPlayerView.h"
 #import "PlayerControlView.h"
 
 @interface KBPlayer () <PlayerControlDelegate, PlayerDelegate>
@@ -58,7 +58,10 @@
             break;
         }
         case KBPlayerTypeAVPlayer:
+        {
+            self.playerView = [[AVPlayerView alloc] initWithFrame:self.bounds url:url];
             break;
+        }
         default:
             break;
     }
@@ -145,7 +148,7 @@
 - (void)seekToSliderValue:(NSTimeInterval)time
 {
     [self.controlView refreshProgress:time];
-    self.playerView.currentPlaybackTime = time;
+    [self.playerView seekToTime:time];
 }
 
 #pragma mark PlayerDelegate
@@ -191,6 +194,7 @@
     switch (movieFinishReason) {
         case KBMovieFinishReasonPlaybackEnded: {
             [self.controlView stop];//视频播完时将按钮状态置为暂停状态
+            [self.playerView pause];
             [self transformFullScreen:NO];
             break;
         }

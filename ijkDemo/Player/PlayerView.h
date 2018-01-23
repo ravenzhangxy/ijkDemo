@@ -12,13 +12,14 @@
 
 @interface PlayerView : UIView
 
-@property (nonatomic, assign) NSTimeInterval currentPlaybackTime;
 @property (nonatomic, weak) id<PlayerDelegate>delegate;
 @property (nonatomic, assign) KBPlaybackState playState;
 
 - (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)url;
+- (void)initPlayer:(NSURL *)url;
 - (void)play;
 - (void)pause;
 - (void)shutdown;
+- (void)seekToTime:(NSTimeInterval)time;
 
 @end
