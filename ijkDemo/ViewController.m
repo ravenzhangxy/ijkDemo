@@ -19,6 +19,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    NSLog(@"-------document path %@", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject);
+//    NSString *filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"test2.mp4"];
+//    NSURL *localUrl = [NSURL fileURLWithPath:filePath];
     // Do any additional setup after loading the view, typically from a nib.
     
     //    https://susuanqiniu.knowbox.cn/map_videos/introduction.flv
@@ -28,7 +32,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.playerView = [[KBPlayer alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) playerType:KBPlayerTypeAVPlayer url:[NSURL URLWithString:@"https://knowapp.b0.upaiyun.com/ss/live/video/170724_school_introduction.mp4"] title:@"123" fullScreen:NO];
+    self.playerView = [[KBPlayer alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 300) playerType:KBPlayerTypeIJK url:[NSURL URLWithString:@"http://knowapp.b0.upaiyun.com/ss/live/video/hanjia23.mp4"] title:@"123" fullScreen:NO];
     __weak typeof(self) weakSelf = self;
     self.playerView.backActionBlock = ^{
         [weakSelf.navigationController popViewControllerAnimated:YES];

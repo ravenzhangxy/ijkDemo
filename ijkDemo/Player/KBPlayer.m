@@ -72,7 +72,7 @@
 - (void)initControlView:(NSString *)title
 {
     self.controlView = [[PlayerControlView alloc] initWithFrame:self.bounds];
-    self.controlView.vedioTitle = title;
+    self.controlView.videoTitle = title;
     [self addSubview:self.controlView];
     self.controlView.delegate = self;
 }

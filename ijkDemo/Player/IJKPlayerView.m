@@ -20,9 +20,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
     self.ijkPlayer.view.frame = self.bounds;
-    self.ijkPlayer.scalingMode = IJKMPMovieScalingModeAspectFit;
 }
 
 - (void)initPlayer:(NSURL *)url
@@ -78,6 +76,23 @@
 - (void)seekToTime:(NSTimeInterval)time
 {
     self.ijkPlayer.currentPlaybackTime = time;
+}
+
+- (void)setScalingMode:(KBMovieScalingMode)scalingMode
+{
+    switch (scalingMode) {
+        case KBMovieScalingModeAspectFit:
+            self.ijkPlayer.scalingMode = IJKMPMovieScalingModeAspectFit;
+            break;
+        case KBMovieScalingModeAspectFill:
+            self.ijkPlayer.scalingMode = IJKMPMovieScalingModeAspectFill;
+            break;
+        case KBMovieScalingModeFill:
+            self.ijkPlayer.scalingMode = IJKMPMovieScalingModeFill;
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark timer event
@@ -157,6 +172,8 @@
             
         case IJKMPMovieFinishReasonPlaybackError:
             NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d\n", reason);
+            self.playState = KBPlaybackStateFailed;
+            //TODO: 显示加载失败
             break;
             
         default:
@@ -171,6 +188,7 @@
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
+    self.playState = KBPlaybackStateReadyToPlay;
     if ([self.delegate respondsToSelector:@selector(refreshTotalDuration:)]) {
         [self.delegate refreshTotalDuration:self.ijkPlayer.duration];
     }

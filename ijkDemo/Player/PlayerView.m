@@ -20,6 +20,7 @@
     if (self) {
         self.backgroundColor = [UIColor blackColor];
         [self initPlayer:url];
+        self.scalingMode = KBMovieScalingModeAspectFill;
     }
     return self;
 }

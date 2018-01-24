@@ -14,6 +14,7 @@
 
 @property (nonatomic, weak) id<PlayerDelegate>delegate;
 @property (nonatomic, assign) KBPlaybackState playState;
+@property (nonatomic, assign) KBMovieScalingMode scalingMode;
 
 - (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)url;
 - (void)initPlayer:(NSURL *)url;

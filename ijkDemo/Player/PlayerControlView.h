@@ -15,7 +15,7 @@
 @property (nonatomic, weak) id<PlayerControlDelegate>delegate;
 @property (nonatomic, getter=isFullScreen) BOOL fullScreen;
 @property (nonatomic, assign) NSTimeInterval totalTime;
-@property (nonatomic, strong) NSString *vedioTitle;
+@property (nonatomic, strong) NSString *videoTitle;
 
 - (void)refreshPlayBtnState:(KBPlaybackState)playbackState;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;

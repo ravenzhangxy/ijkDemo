@@ -302,9 +302,10 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     self.seekLabel.hidden = NO;
 }
 
-- (void)setVedioTitle:(NSString *)vedioTitle
+- (void)setVideoTitle:(NSString *)videoTitle
 {
-    _titleLabel.text = vedioTitle;
+    _videoTitle = videoTitle;
+    _titleLabel.text = videoTitle;
 }
 
 #pragma mark lazy load
