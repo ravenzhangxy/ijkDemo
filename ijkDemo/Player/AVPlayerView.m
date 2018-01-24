@@ -32,6 +32,11 @@
     self.playerViewLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     [self.layer addSublayer:self.playerViewLayer];
     
+    // 程序即将退出活跃状态
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    // 程序进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDidFinished) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
     __weak typeof(self) weakSelf = self;
     self.timeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
@@ -45,11 +50,17 @@
 - (void)play
 {
     [self.player play];
+    if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+        [self.delegate moviePlayBackStateDidChange:KBPlaybackStatePlaying];
+    }
 }
 
 -(void)pause
 {
     [self.player pause];
+    if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+        [self.delegate moviePlayBackStateDidChange:KBPlaybackStatePaused];
+    }
 }
 
 - (void)seekToTime:(NSTimeInterval)time
@@ -86,6 +97,17 @@
         float currentTimeValue = isnan(time.value*1.0/time.timescale)?0.0f:time.value*1.0/time.timescale;
         [self.delegate refreshProgress:!isnan(currentTimeValue)?currentTimeValue:0.0f];
     }
+}
+
+#pragma mark notification
+- (void)appWillResignActive:(NSNotification *)notification
+{
+    [self pause];
+}
+
+- (void)appDidBecomeActive:(NSNotification *)notification
+{
+    [self play];
 }
 
 @end

@@ -101,7 +101,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     singleTapGR.numberOfTapsRequired = 1;
     [self addGestureRecognizer:singleTapGR];
     
-    UITapGestureRecognizer *doubleTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playOrPause)];
+    UITapGestureRecognizer *doubleTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapAction)];
     doubleTapGR.numberOfTapsRequired = 2;
     [self addGestureRecognizer:doubleTapGR];
     
@@ -149,14 +149,12 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     }
 }
 
-- (void)playOrPause
+- (void)doubleTapAction
 {
     self.isPlay = !self.isPlay;
     if (self.isPlay) {
-        self.playButton.selected = NO;
         [self.delegate play];
     } else {
-        self.playButton.selected = YES;
         [self.delegate pause];
     }
 }
@@ -165,18 +163,21 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 {
     sender.selected = !sender.selected;
     if (sender.selected) {
-        self.isPlay = NO;
         [self.delegate pause];
     } else {
-        self.isPlay = YES;
         [self.delegate play];
     }
 }
 
-- (void)stop
+- (void)refreshPlayBtnState:(KBPlaybackState)playbackState
 {
-    self.isPlay = NO;
-    self.playButton.selected = YES;
+    if (playbackState == KBPlaybackStatePlaying) {
+        self.isPlay = YES;
+        self.playButton.selected = NO;
+    } else if (playbackState == KBPlaybackStatePaused || playbackState == KBPlaybackStateStopped) {
+        self.isPlay = NO;
+        self.playButton.selected = YES;
+    }
 }
 
 - (void)zoom:(UIButton *)sender

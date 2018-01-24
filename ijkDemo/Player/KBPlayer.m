@@ -187,13 +187,14 @@
             break;
         }
     }
+    [self.controlView refreshPlayBtnState:playbackState];
 }
 
 - (void)moviePlayBackDidFinish:(NSInteger)movieFinishReason
 {
     switch (movieFinishReason) {
         case KBMovieFinishReasonPlaybackEnded: {
-            [self.controlView stop];//视频播完时将按钮状态置为暂停状态
+            [self.controlView refreshPlayBtnState:KBPlaybackStateStopped];//视频播完时将按钮状态置为暂停状态
             [self.playerView pause];
             [self transformFullScreen:NO];
             break;

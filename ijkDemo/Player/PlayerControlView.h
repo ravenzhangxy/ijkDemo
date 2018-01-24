@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PlayerControlDelegate.h"
+#import "PlayerHeader.h"
 
 @interface PlayerControlView : UIView
 
@@ -16,7 +17,7 @@
 @property (nonatomic, assign) NSTimeInterval totalTime;
 @property (nonatomic, strong) NSString *vedioTitle;
 
-- (void)stop;
+- (void)refreshPlayBtnState:(KBPlaybackState)playbackState;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)refreshProgress:(NSTimeInterval)currentTime;
 
