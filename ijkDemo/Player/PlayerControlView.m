@@ -7,6 +7,9 @@
 //
 
 #import "PlayerControlView.h"
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import "BrightnessView.h"
 
 #define kFixedScreenWidth    ( [[UIScreen mainScreen] respondsToSelector:@selector(fixedCoordinateSpace)] ? [UIScreen mainScreen].fixedCoordinateSpace.bounds.size.width : [UIScreen mainScreen].bounds.size.width )
 #define kScaleBaseForPhone6Radio (kFixedScreenWidth/375.0)
@@ -14,6 +17,11 @@
 typedef NS_ENUM(NSUInteger, PanDirection) {
     PanDirectionHorizon = 0,
     PanDirectionVertical
+};
+
+typedef NS_ENUM(NSUInteger, AdjustType) {
+    AdjustTypeVolume,
+    AdjustTypeBrightness,
 };
 
 @interface PlayerControlView ()
@@ -30,14 +38,17 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
 //progress
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
-//hud
+//
 @property (nonatomic, strong) UILabel *seekLabel;
+@property (nonatomic, strong) UISlider *volumeSlider;
+@property (nonatomic, strong) BrightnessView *brightnessView;
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
 @property (nonatomic, assign) NSTimeInterval totalDuration;
 @property (nonatomic, assign) PanDirection panDirection;
 @property (nonatomic, assign) CGFloat panMoveDuration;
+@property (nonatomic, assign) AdjustType adjustType;
 
 @end
 
@@ -62,10 +73,12 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
         width = CGRectGetHeight(self.superview.frame);
         height = CGRectGetWidth(self.superview.frame);
         self.zoomButton.selected = YES;
+        self.brightnessView.transform = CGAffineTransformMakeRotation(M_PI_2);
     } else {
         width = CGRectGetWidth(self.superview.frame);
         height = CGRectGetHeight(self.superview.frame);
         self.zoomButton.selected = NO;
+        self.brightnessView.transform = CGAffineTransformMakeRotation(0);
     }
     
     CGRect topFrame = self.topPanel.frame;
@@ -124,9 +137,34 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self showOrHide];
     });
+    
+    [self configureVolume];
+    self.brightnessView = [[BrightnessView alloc] init];
+    [[UIApplication sharedApplication].keyWindow addSubview:self.brightnessView];
 }
 
-#pragma mark Event
+/**
+ *  获取系统音量
+ */
+- (void)configureVolume {
+    MPVolumeView *volumeView = [[MPVolumeView alloc] init];
+    _volumeSlider = nil;
+    for (UIView *view in [volumeView subviews]){
+        if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
+            _volumeSlider = (UISlider *)view;
+            break;
+        }
+    }
+    // 使用这个category的应用不会随着手机静音键打开而静音，可在手机静音下播放声音
+    NSError *setCategoryError = nil;
+    BOOL success = [[AVAudioSession sharedInstance]
+                    setCategory: AVAudioSessionCategoryPlayback
+                    error: &setCategoryError];
+    
+    if (!success) { /* handle the error in setCategoryError */ }
+}
+
+#pragma mark --- Event
 - (void)back
 {
     [self.delegate back];
@@ -237,9 +275,9 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
                 self.panDirection = PanDirectionVertical;
                 // 开始滑动的时候,状态改为正在控制音量
                 if (locationPoint.x > self.bounds.size.width / 2) { // 音量调节
-                    
+                    self.adjustType = AdjustTypeVolume;
                 } else { // 亮度调节
-                    
+                    self.adjustType = AdjustTypeBrightness;
                 }
             }
             break;
@@ -254,6 +292,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
                 }
                 case PanDirectionVertical:{
                     // 垂直移动方法只要y方向的值
+                    [self adjustValueChange:velocityPoint.y];
                     break;
                 }
                 default:
@@ -273,7 +312,11 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
                     break;
                 }
                 case PanDirectionVertical:{
-                    
+                    if (self.adjustType == AdjustTypeBrightness) {
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            self.brightnessView.alpha = 0;
+                        });
+                    }
                     break;
                 }
                 default:
@@ -302,13 +345,22 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
     self.seekLabel.hidden = NO;
 }
 
+- (void)adjustValueChange:(CGFloat)value
+{
+    if (self.adjustType == AdjustTypeBrightness) {
+        [UIScreen mainScreen].brightness -= value / 10000;
+    } else if (self.adjustType == AdjustTypeVolume) {
+        self.volumeSlider.value -= value / 12000;
+    }
+}
+
 - (void)setVideoTitle:(NSString *)videoTitle
 {
     _videoTitle = videoTitle;
     _titleLabel.text = videoTitle;
 }
 
-#pragma mark lazy load
+#pragma mark --- lazy load
 - (UIView *)topPanel
 {
     if (!_topPanel) {
