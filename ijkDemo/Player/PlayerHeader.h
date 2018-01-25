@@ -9,6 +9,9 @@
 #ifndef PlayerHeader_h
 #define PlayerHeader_h
 
+#define KBPlayerSrcName(file)   [@"KBPlayer.bundle" stringByAppendingPathComponent:file]
+#define KBPlayerImage(file)     [UIImage imageNamed:KBPlayerSrcName(file)]
+
 typedef NS_ENUM(NSUInteger, KBPlayerType) {
     KBPlayerTypeIJK = 0,
     KBPlayerTypeAVPlayer,

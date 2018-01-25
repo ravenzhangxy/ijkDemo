@@ -7,6 +7,7 @@
 //
 
 #import "BrightnessView.h"
+#import "PlayerHeader.h"
 
 @interface BrightnessView ()
 
@@ -49,7 +50,7 @@
     titleLabel.text = @"亮度";
     [self addSubview:titleLabel];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"brightness"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:KBPlayerImage(@"KBPlayer_brightness")];
     imageView.frame = CGRectMake(0, 0, 79, 76);
     imageView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
     [self addSubview:imageView];

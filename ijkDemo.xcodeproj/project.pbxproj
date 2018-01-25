@@ -32,17 +32,14 @@
 		972009FF1FE285C0003CAEE5 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972009FB1FE285C0003CAEE5 /* PlayerView.m */; };
 		97200A021FE28615003CAEE5 /* IJKMediaFrameworkWithSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */; };
 		97200A031FE28615003CAEE5 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		97200A091FE2905A003CAEE5 /* challenge_videoPlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A051FE29059003CAEE5 /* challenge_videoPlay@2x.png */; };
 		97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */; };
-		97200A0B1FE2905B003CAEE5 /* challenge_videoPause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */; };
 		97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */; };
 		972AEFBB20170AFE000DB581 /* KBPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFBA20170AFE000DB581 /* KBPlayer.m */; };
 		972AEFDD20174ACA000DB581 /* IJKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFDC20174ACA000DB581 /* IJKPlayerView.m */; };
 		972AEFE020174FE8000DB581 /* AVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFDF20174FE8000DB581 /* AVPlayerView.m */; };
 		972AF0052019C1E6000DB581 /* BrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AF0042019C1E6000DB581 /* BrightnessView.m */; };
 		972AF0072019E9BB000DB581 /* KBPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 972AF0062019E9BB000DB581 /* KBPlayer.bundle */; };
-		972AF0092019E9F6000DB581 /* brightness@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972AF0082019E9F6000DB581 /* brightness@2x.png */; };
-		97D50D171FECE36D00EFEC4B /* challenge_videoBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */; };
+		972AF00C2019FDD4000DB581 /* KBPlayerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AF00B2019FDD4000DB581 /* KBPlayerHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,9 +89,7 @@
 		972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFrameworkWithSSL.framework; sourceTree = "<group>"; };
 		972009FB1FE285C0003CAEE5 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
 		972009FC1FE285C0003CAEE5 /* PlayerControlDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerControlDelegate.h; sourceTree = "<group>"; };
-		97200A051FE29059003CAEE5 /* challenge_videoPlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoPlay@2x.png"; sourceTree = "<group>"; };
 		97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoMiniScreen@2x.png"; sourceTree = "<group>"; };
-		97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoPause@2x.png"; sourceTree = "<group>"; };
 		97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoAllScreen@2x.png"; sourceTree = "<group>"; };
 		972AEFB920170AFE000DB581 /* KBPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBPlayer.h; sourceTree = "<group>"; };
 		972AEFBA20170AFE000DB581 /* KBPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KBPlayer.m; sourceTree = "<group>"; };
@@ -107,8 +102,8 @@
 		972AF0032019C1E6000DB581 /* BrightnessView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrightnessView.h; sourceTree = "<group>"; };
 		972AF0042019C1E6000DB581 /* BrightnessView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightnessView.m; sourceTree = "<group>"; };
 		972AF0062019E9BB000DB581 /* KBPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KBPlayer.bundle; sourceTree = "<group>"; };
-		972AF0082019E9F6000DB581 /* brightness@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brightness@2x.png"; sourceTree = "<group>"; };
-		97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoBack@2x.png"; sourceTree = "<group>"; };
+		972AF00A2019FDD4000DB581 /* KBPlayerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBPlayerHelper.h; sourceTree = "<group>"; };
+		972AF00B2019FDD4000DB581 /* KBPlayerHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KBPlayerHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,10 +158,6 @@
 				972009501FDE972B003CAEE5 /* ViewController.m */,
 				97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */,
 				97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */,
-				97200A071FE2905A003CAEE5 /* challenge_videoPause@2x.png */,
-				97200A051FE29059003CAEE5 /* challenge_videoPlay@2x.png */,
-				97D50D161FECE36D00EFEC4B /* challenge_videoBack@2x.png */,
-				972AF0082019E9F6000DB581 /* brightness@2x.png */,
 				972009F61FE28583003CAEE5 /* Player */,
 				972009871FDE9E06003CAEE5 /* RootViewController.h */,
 				972009881FDE9E06003CAEE5 /* RootViewController.m */,
@@ -216,6 +207,8 @@
 				972009F91FE285C0003CAEE5 /* PlayerControlView.m */,
 				972AF0032019C1E6000DB581 /* BrightnessView.h */,
 				972AF0042019C1E6000DB581 /* BrightnessView.m */,
+				972AF00A2019FDD4000DB581 /* KBPlayerHelper.h */,
+				972AF00B2019FDD4000DB581 /* KBPlayerHelper.m */,
 				972009FC1FE285C0003CAEE5 /* PlayerControlDelegate.h */,
 				972AEFBD20171F60000DB581 /* PlayerDelegate.h */,
 				972AEFBC20171A7E000DB581 /* PlayerHeader.h */,
@@ -284,13 +277,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */,
-				97D50D171FECE36D00EFEC4B /* challenge_videoBack@2x.png in Resources */,
-				972AF0092019E9F6000DB581 /* brightness@2x.png in Resources */,
 				972009591FDE972B003CAEE5 /* LaunchScreen.storyboard in Resources */,
 				972009561FDE972B003CAEE5 /* Assets.xcassets in Resources */,
 				972AF0072019E9BB000DB581 /* KBPlayer.bundle in Resources */,
-				97200A0B1FE2905B003CAEE5 /* challenge_videoPause@2x.png in Resources */,
-				97200A091FE2905A003CAEE5 /* challenge_videoPlay@2x.png in Resources */,
 				97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */,
 				972009541FDE972B003CAEE5 /* Main.storyboard in Resources */,
 			);
@@ -311,6 +300,7 @@
 				972AEFE020174FE8000DB581 /* AVPlayerView.m in Sources */,
 				9720095C1FDE972C003CAEE5 /* main.m in Sources */,
 				972009891FDE9E06003CAEE5 /* RootViewController.m in Sources */,
+				972AF00C2019FDD4000DB581 /* KBPlayerHelper.m in Sources */,
 				9720094E1FDE972B003CAEE5 /* AppDelegate.m in Sources */,
 				972AEFBB20170AFE000DB581 /* KBPlayer.m in Sources */,
 			);

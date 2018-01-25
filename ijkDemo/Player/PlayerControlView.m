@@ -312,11 +312,9 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
                     break;
                 }
                 case PanDirectionVertical:{
-                    if (self.adjustType == AdjustTypeBrightness) {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            self.brightnessView.alpha = 0;
-                        });
-                    }
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.brightnessView.alpha = 0;
+                    });
                     break;
                 }
                 default:
@@ -384,8 +382,8 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (!_playButton) {
         _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _playButton.frame = CGRectMake(0, 0, CGRectGetHeight(_bottomPanel.frame), CGRectGetHeight(_bottomPanel.frame));
-        [_playButton setImage:[UIImage imageNamed:@"challenge_videoPause"] forState:UIControlStateNormal];
-        [_playButton setImage:[UIImage imageNamed:@"challenge_videoPlay"] forState:UIControlStateSelected];
+        [_playButton setImage:KBPlayerImage(@"KBPlayer_pause") forState:UIControlStateNormal];
+        [_playButton setImage:KBPlayerImage(@"KBPlayer_play") forState:UIControlStateSelected];
         _playButton.adjustsImageWhenHighlighted = NO;
         [_playButton addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -408,8 +406,8 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (!_zoomButton) {
         _zoomButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _zoomButton.frame = CGRectMake(CGRectGetWidth(self.frame) - CGRectGetHeight(_bottomPanel.frame), 0, CGRectGetHeight(_bottomPanel.frame), CGRectGetHeight(_bottomPanel.frame));
-        [_zoomButton setImage:[UIImage imageNamed:@"challenge_videoAllScreen"] forState:UIControlStateNormal];
-        [_zoomButton setImage:[UIImage imageNamed:@"challenge_videoMiniScreen"] forState:UIControlStateSelected];
+        [_zoomButton setImage:KBPlayerImage(@"KBPlayer_fullscreen") forState:UIControlStateNormal];
+        [_zoomButton setImage:KBPlayerImage(@"KBPlayer_miniScreen") forState:UIControlStateSelected];
         _zoomButton.adjustsImageWhenHighlighted = NO;
         [_zoomButton addTarget:self action:@selector(zoom:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -421,7 +419,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (!_backButton) {
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(0, 0, CGRectGetHeight(_topPanel.frame), CGRectGetHeight(_topPanel.frame));
-        [_backButton setImage:[UIImage imageNamed:@"challenge_videoBack"] forState:UIControlStateNormal];
+        [_backButton setImage:KBPlayerImage(@"KBPlayer_back") forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
