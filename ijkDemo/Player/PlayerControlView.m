@@ -334,6 +334,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
         _playButton.frame = CGRectMake(0, 0, CGRectGetHeight(_bottomPanel.frame), CGRectGetHeight(_bottomPanel.frame));
         [_playButton setImage:[UIImage imageNamed:@"challenge_videoPause"] forState:UIControlStateNormal];
         [_playButton setImage:[UIImage imageNamed:@"challenge_videoPlay"] forState:UIControlStateSelected];
+        _playButton.adjustsImageWhenHighlighted = NO;
         [_playButton addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _playButton;
@@ -357,6 +358,7 @@ typedef NS_ENUM(NSUInteger, PanDirection) {
         _zoomButton.frame = CGRectMake(CGRectGetWidth(self.frame) - CGRectGetHeight(_bottomPanel.frame), 0, CGRectGetHeight(_bottomPanel.frame), CGRectGetHeight(_bottomPanel.frame));
         [_zoomButton setImage:[UIImage imageNamed:@"challenge_videoAllScreen"] forState:UIControlStateNormal];
         [_zoomButton setImage:[UIImage imageNamed:@"challenge_videoMiniScreen"] forState:UIControlStateSelected];
+        _zoomButton.adjustsImageWhenHighlighted = NO;
         [_zoomButton addTarget:self action:@selector(zoom:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _zoomButton;
