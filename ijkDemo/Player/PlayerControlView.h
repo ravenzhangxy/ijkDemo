@@ -20,6 +20,7 @@
 - (void)refreshPlayBtnState:(KBPlaybackState)playbackState;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)refreshProgress:(NSTimeInterval)currentTime;
-- (void)showError:(BOOL)isShow;
+- (void)showError:(BOOL)isShow;// 待扩展 根据错误类型显示不同文案，以及响应不同事件
+- (void)updateCurrentFrameImage:(UIImage *)image;
 
 @end

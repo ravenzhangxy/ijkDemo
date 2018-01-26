@@ -151,6 +151,7 @@
 {
     [self.controlView refreshProgress:time];
     [self.playerView seekToTime:time];
+//    [self.controlView updateCurrentFrameImage:[self.playerView thumbnailImageAtCurrentTime]];
 }
 
 - (void)retry

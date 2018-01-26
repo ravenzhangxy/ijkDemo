@@ -15,6 +15,7 @@
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) AVPlayer *player;
 @property (nonatomic, strong) id timeObserver;
+@property (nonatomic, strong) AVPlayerItemVideoOutput *videoOutput;
 
 @end
 
@@ -31,6 +32,8 @@
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
     self.playerViewLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     [self.layer addSublayer:self.playerViewLayer];
+    self.videoOutput = [[AVPlayerItemVideoOutput alloc] init];
+    [self.playerItem addOutput:self.videoOutput];
     
     // 程序即将退出活跃状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -107,6 +110,24 @@
     }
 }
 
+- (UIImage *)thumbnailImageAtCurrentTime
+{
+    CMTime itemTime = _player.currentItem.currentTime;
+    CVPixelBufferRef pixelBuffer = [_videoOutput copyPixelBufferForItemTime:itemTime itemTimeForDisplay:nil];
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
+    CGImageRef videoImage = [temporaryContext
+                             createCGImage:ciImage
+                             fromRect:CGRectMake(0, 0,
+                                                 CVPixelBufferGetWidth(pixelBuffer),
+                                                 CVPixelBufferGetHeight(pixelBuffer))];
+    
+    //当前帧的画面
+    UIImage *currentImage = [UIImage imageWithCGImage:videoImage];
+    CGImageRelease(videoImage);
+    return currentImage;
+}
+
 #pragma mark private
 - (void)playDidFinished
 {
@@ -169,12 +190,16 @@
 #pragma mark notification
 - (void)appWillResignActive:(NSNotification *)notification
 {
-    [self pause];
+    if (self.player) {
+        [self pause];
+    }
 }
 
 - (void)appDidBecomeActive:(NSNotification *)notification
 {
-    [self play];
+    if (self.player) {
+        [self play];
+    }
 }
 
 @end

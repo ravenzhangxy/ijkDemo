@@ -22,5 +22,6 @@
 - (void)pause;
 - (void)shutdown;
 - (void)seekToTime:(NSTimeInterval)time;
+- (UIImage *)thumbnailImageAtCurrentTime;
 
 @end

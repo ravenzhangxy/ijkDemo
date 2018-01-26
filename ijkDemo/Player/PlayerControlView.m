@@ -43,6 +43,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 @property (nonatomic, strong) UISlider *volumeSlider;
 @property (nonatomic, strong) BrightnessView *brightnessView;
 @property (nonatomic, strong) UIButton *errorButton;
+@property (nonatomic, strong) UIImageView *currentFrameImageView;
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
@@ -108,6 +109,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     
     self.seekLabel.center = CGPointMake(width / 2, height / 2);
     self.errorButton.center = CGPointMake(width / 2, height / 2);
+    self.currentFrameImageView.center = CGPointMake(width / 2, height / 2);
 }
 
 - (void)setupViews
@@ -136,6 +138,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     
     [self addSubview:self.seekLabel];
     [self addSubview:self.errorButton];
+    [self addSubview:self.currentFrameImageView];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self singleTapAction];
@@ -241,6 +244,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 
 - (void)sliderCanceled
 {
+    self.currentFrameImageView.hidden = YES;
     if (!self.playButton.userInteractionEnabled) {
         return;
     }
@@ -280,6 +284,12 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (isShow) {
         self.playButton.userInteractionEnabled = NO;
     }
+}
+
+- (void)updateCurrentFrameImage:(UIImage *)image
+{
+    self.currentFrameImageView.hidden = NO;
+    self.currentFrameImageView.image = image;
 }
 
 #pragma mark UIPanGestureRecognizer 滑动改变进度、音量、亮度
@@ -507,6 +517,15 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
         _errorButton.hidden = YES;
     }
     return _errorButton;
+}
+
+- (UIImageView *)currentFrameImageView
+{
+    if (!_currentFrameImageView) {
+        _currentFrameImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160 * kScaleBaseForPhone6Radio, 120 * kScaleBaseForPhone6Radio)];
+        _currentFrameImageView.hidden = YES;
+    }
+    return _currentFrameImageView;
 }
 
 //通过颜色来生成一个纯色图片

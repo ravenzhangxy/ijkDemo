@@ -95,10 +95,17 @@
     }
 }
 
+- (UIImage *)thumbnailImageAtCurrentTime
+{
+    return [self.ijkPlayer thumbnailImageAtCurrentTime];
+}
+
 #pragma mark timer event
 - (void)refreshControlView
 {
-    [self.delegate refreshProgress:self.ijkPlayer.currentPlaybackTime];
+    if ([self.delegate respondsToSelector:@selector(refreshProgress:)]) {
+        [self.delegate refreshProgress:self.ijkPlayer.currentPlaybackTime];
+    }
 }
 
 #pragma mark Install Movie Notifications

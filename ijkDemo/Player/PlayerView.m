@@ -50,4 +50,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (UIImage *)thumbnailImageAtCurrentTime
+{
+    return nil;
+}
+
 @end
