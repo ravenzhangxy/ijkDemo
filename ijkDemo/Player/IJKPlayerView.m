@@ -173,7 +173,9 @@
         case IJKMPMovieFinishReasonPlaybackError:
             NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d\n", reason);
             self.playState = KBPlaybackStateFailed;
-            //TODO: 显示加载失败
+            if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+                [self.delegate moviePlayBackStateDidChange:KBPlaybackStateFailed];
+            }
             break;
             
         default:

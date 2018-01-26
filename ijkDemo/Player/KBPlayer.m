@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) CGRect originFrame;
 @property (nonatomic, assign) KBPlayerType playerType;
+@property (nonatomic, strong) NSURL *url;
 
 @end
 
@@ -51,6 +52,7 @@
 - (void)initPlayer:(KBPlayerType)playerType url:(NSURL *)url
 {
     self.playerType = playerType;
+    self.url = url;
     switch (playerType) {
         case KBPlayerTypeIJK:
         {
@@ -151,6 +153,12 @@
     [self.playerView seekToTime:time];
 }
 
+- (void)retry
+{
+    [self.playerView shutdown];
+    [self.playerView initPlayer:self.url];
+}
+
 #pragma mark PlayerDelegate
 - (void)refreshProgress:(NSTimeInterval)time
 {
@@ -171,6 +179,7 @@
             break;
         }
         case KBPlaybackStatePlaying: {
+            [self.controlView showError:NO];
             break;
         }
         case KBPlaybackStatePaused: {
@@ -181,6 +190,13 @@
         }
         case KBPlaybackStateSeekingForward:
         case KBPlaybackStateSeekingBackward: {
+            break;
+        }
+        case KBPlaybackStateReadyToPlay:
+            break;
+        case KBPlaybackStateFailed: {
+            [self.controlView showError:YES];
+            [self.controlView refreshPlayBtnState:KBPlaybackStateFailed];
             break;
         }
         default: {

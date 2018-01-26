@@ -15,5 +15,6 @@
 - (void)back;
 - (void)transformFullScreen:(BOOL)isZoomUp;
 - (void)seekToSliderValue:(NSTimeInterval)time;
+- (void)retry;
 
 @end

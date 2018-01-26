@@ -42,6 +42,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 @property (nonatomic, strong) UILabel *seekLabel;
 @property (nonatomic, strong) UISlider *volumeSlider;
 @property (nonatomic, strong) BrightnessView *brightnessView;
+@property (nonatomic, strong) UIButton *errorButton;
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
@@ -106,11 +107,12 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     self.progressSlider.frame = sliderFrame;
     
     self.seekLabel.center = CGPointMake(width / 2, height / 2);
+    self.errorButton.center = CGPointMake(width / 2, height / 2);
 }
 
 - (void)setupViews
 {
-    UITapGestureRecognizer *singleTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHide)];
+    UITapGestureRecognizer *singleTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
     singleTapGR.numberOfTapsRequired = 1;
     [self addGestureRecognizer:singleTapGR];
     
@@ -133,9 +135,10 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     [self.bottomPanel addSubview:self.progressSlider];
     
     [self addSubview:self.seekLabel];
+    [self addSubview:self.errorButton];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self showOrHide];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self singleTapAction];
     });
     
     [self configureVolume];
@@ -167,24 +170,29 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 #pragma mark --- Event
 - (void)back
 {
+    if (self.isFullScreen) {
+        [self.delegate transformFullScreen:NO];
+    }
     [self.delegate back];
 }
 
-- (void)showOrHide
+- (void)singleTapAction
 {
     self.isShowControl = !self.isShowControl;
     if (self.isShowControl) {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.topPanel.hidden = NO;
-            self.bottomPanel.hidden = NO;
-        }];
-        [self performSelector:@selector(showOrHide) withObject:nil afterDelay:3.5];
+        [self showOrHide:NO];
+        [self performSelector:@selector(singleTapAction) withObject:nil afterDelay:5];
     } else {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.topPanel.hidden = YES;
-            self.bottomPanel.hidden = YES;
-        }];
+        [self showOrHide:YES];
     }
+}
+
+- (void)showOrHide:(BOOL)isShow
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.topPanel.hidden = isShow;
+        self.bottomPanel.hidden = isShow;
+    }];
 }
 
 - (void)doubleTapAction
@@ -212,7 +220,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (playbackState == KBPlaybackStatePlaying) {
         self.isPlay = YES;
         self.playButton.selected = NO;
-    } else if (playbackState == KBPlaybackStatePaused || playbackState == KBPlaybackStateStopped) {
+    } else if (playbackState == KBPlaybackStatePaused || playbackState == KBPlaybackStateStopped || playbackState == KBPlaybackStateFailed) {
         self.isPlay = NO;
         self.playButton.selected = YES;
     }
@@ -233,6 +241,9 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 
 - (void)sliderCanceled
 {
+    if (!self.playButton.userInteractionEnabled) {
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(play)]) {
         [self.delegate play];
         self.isPlay = YES;
@@ -254,6 +265,24 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     self.timeLabel.text = [NSString stringWithFormat:@"%@/%@", current, total];
 }
 
+- (void)retry
+{
+    self.errorButton.hidden = YES;
+    if ([self.delegate respondsToSelector:@selector(retry)]) {
+        [self.delegate retry];
+        self.playButton.userInteractionEnabled = YES;
+    }
+}
+
+- (void)showError:(BOOL)isShow
+{
+    self.errorButton.hidden = !isShow;
+    if (isShow) {
+        self.playButton.userInteractionEnabled = NO;
+    }
+}
+
+#pragma mark UIPanGestureRecognizer 滑动改变进度、音量、亮度
 - (void)panGestureAction:(UIPanGestureRecognizer *)pan
 {
     //根据在view上Pan的位置，确定是调音量还是亮度
@@ -352,6 +381,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     }
 }
 
+#pragma mark setter
 - (void)setVideoTitle:(NSString *)videoTitle
 {
     _videoTitle = videoTitle;
@@ -464,6 +494,19 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
         _seekLabel.layer.cornerRadius = 10;
     }
     return _seekLabel;
+}
+
+- (UIButton *)errorButton
+{
+    if (!_errorButton) {
+        _errorButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _errorButton.frame = CGRectMake(0, 0, 200, 30);
+        [_errorButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_errorButton setTitle:@"加载失败，请点击重试" forState:UIControlStateNormal];
+        [_errorButton addTarget:self action:@selector(retry) forControlEvents:UIControlEventTouchUpInside];
+        _errorButton.hidden = YES;
+    }
+    return _errorButton;
 }
 
 //通过颜色来生成一个纯色图片

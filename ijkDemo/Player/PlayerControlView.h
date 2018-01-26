@@ -20,5 +20,6 @@
 - (void)refreshPlayBtnState:(KBPlaybackState)playbackState;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)refreshProgress:(NSTimeInterval)currentTime;
+- (void)showError:(BOOL)isShow;
 
 @end

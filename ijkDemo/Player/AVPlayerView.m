@@ -127,23 +127,24 @@
     if (object == self.player.currentItem) {
         if ([keyPath isEqualToString:@"status"]) {
             if (self.player.currentItem.status == AVPlayerItemStatusReadyToPlay) {
-                //TODO:移除菊花
                 self.playState = KBPlaybackStateReadyToPlay;
                 if ([self.delegate respondsToSelector:@selector(refreshTotalDuration:)]) {
                     float allTime = CMTimeGetSeconds(self.playerItem.duration);
                     [self.delegate refreshTotalDuration:!isnan(allTime)?allTime:0.0f];
                 }
             } else if (self.player.currentItem.status == AVPlayerItemStatusFailed) {
-                //TODO:显示加载失败
                 self.playState = KBPlaybackStateFailed;
+            }
+            if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+                [self.delegate moviePlayBackStateDidChange:self.playState];
             }
         } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
             //TODO:显示缓冲进度
             //计算缓冲进度
-//            NSTimeInterval timeInterval = [self availableDuration];
-//            CMTime duration             = self.playerItem.duration;
-//            CGFloat totalDuration       = CMTimeGetSeconds(duration);
-//            [self.controlView zf_playerSetProgress:timeInterval / totalDuration];
+            //            NSTimeInterval timeInterval = [self availableDuration];
+            //            CMTime duration             = self.playerItem.duration;
+            //            CGFloat totalDuration       = CMTimeGetSeconds(duration);
+            //            [self.controlView zf_playerSetProgress:timeInterval / totalDuration];
         } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
             // 当缓冲是空的时候
         } else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
@@ -177,3 +178,4 @@
 }
 
 @end
+
