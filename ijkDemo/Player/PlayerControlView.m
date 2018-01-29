@@ -72,15 +72,9 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     CGFloat width = CGRectGetWidth(self.superview.frame);
     CGFloat height = CGRectGetHeight(self.superview.frame);
     if (self.isFullScreen) {
-//        width = CGRectGetHeight(self.superview.frame);
-//        height = CGRectGetWidth(self.superview.frame);
         self.zoomButton.selected = YES;
-////        self.brightnessView.transform = CGAffineTransformMakeRotation(M_PI_2);
     } else {
-//        width = CGRectGetWidth(self.superview.frame);
-//        height = CGRectGetHeight(self.superview.frame);
         self.zoomButton.selected = NO;
-////        self.brightnessView.transform = CGAffineTransformMakeRotation(0);
     }
     
     CGRect topFrame = self.topPanel.frame;
