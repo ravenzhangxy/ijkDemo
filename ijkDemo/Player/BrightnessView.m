@@ -18,11 +18,6 @@
 
 @implementation BrightnessView
 
-- (void)layoutSubviews
-{
-    self.center = CGPointMake(CGRectGetMidX([UIScreen mainScreen].bounds), CGRectGetMidY([UIScreen mainScreen].bounds));
-}
-
 - (instancetype)init
 {
     if (self = [super init]) {

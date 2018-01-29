@@ -42,17 +42,17 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-    return YES;
+    return NO;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

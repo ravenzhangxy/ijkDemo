@@ -69,18 +69,18 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 
 - (void)layoutSubviews
 {
-    CGFloat width = 0.f;
-    CGFloat height = 0.f;
+    CGFloat width = CGRectGetWidth(self.superview.frame);
+    CGFloat height = CGRectGetHeight(self.superview.frame);
     if (self.isFullScreen) {
-        width = CGRectGetHeight(self.superview.frame);
-        height = CGRectGetWidth(self.superview.frame);
+//        width = CGRectGetHeight(self.superview.frame);
+//        height = CGRectGetWidth(self.superview.frame);
         self.zoomButton.selected = YES;
-        self.brightnessView.transform = CGAffineTransformMakeRotation(M_PI_2);
+////        self.brightnessView.transform = CGAffineTransformMakeRotation(M_PI_2);
     } else {
-        width = CGRectGetWidth(self.superview.frame);
-        height = CGRectGetHeight(self.superview.frame);
+//        width = CGRectGetWidth(self.superview.frame);
+//        height = CGRectGetHeight(self.superview.frame);
         self.zoomButton.selected = NO;
-        self.brightnessView.transform = CGAffineTransformMakeRotation(0);
+////        self.brightnessView.transform = CGAffineTransformMakeRotation(0);
     }
     
     CGRect topFrame = self.topPanel.frame;
@@ -110,6 +110,10 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     self.seekLabel.center = CGPointMake(width / 2, height / 2);
     self.errorButton.center = CGPointMake(width / 2, height / 2);
     self.currentFrameImageView.center = CGPointMake(width / 2, height / 2);
+    
+    [self.brightnessView removeFromSuperview];
+    [[UIApplication sharedApplication].keyWindow addSubview:self.brightnessView];
+    self.brightnessView.center = CGPointMake(CGRectGetMidX([UIScreen mainScreen].bounds), CGRectGetMidY([UIScreen mainScreen].bounds));
 }
 
 - (void)setupViews
@@ -351,8 +355,9 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
                     break;
                 }
                 case PanDirectionVertical:{
+                    __weak typeof(self) weakSelf = self;
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        self.brightnessView.alpha = 0;
+                        weakSelf.brightnessView.alpha = 0;
                     });
                     break;
                 }
