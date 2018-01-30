@@ -120,20 +120,6 @@
     self.controlView.fullScreen = isZoomUp;
 }
 
--(void)resetSubViewsTransform:(CGAffineTransform)aTransform
-{
-    for (UIView *sView in self.subviews) {
-        sView.transform = aTransform;
-    }
-    
-    for (CALayer *sLayer in self.layer.sublayers) {
-        sLayer.affineTransform = aTransform;
-    }
-    
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
-}
-
 - (void)seekToSliderValue:(NSTimeInterval)time
 {
     [self.controlView refreshProgress:time];

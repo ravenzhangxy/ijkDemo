@@ -386,7 +386,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (self.adjustType == AdjustTypeBrightness) {
         [UIScreen mainScreen].brightness -= value / 10000;
     } else if (self.adjustType == AdjustTypeVolume) {
-        self.volumeSlider.value -= value / 12000;
+        self.volumeSlider.value -= value / 10000;
     }
 }
 
