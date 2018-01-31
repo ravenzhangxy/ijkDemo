@@ -69,8 +69,8 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 
 - (void)layoutSubviews
 {
-    CGFloat width = CGRectGetWidth(self.superview.frame);
-    CGFloat height = CGRectGetHeight(self.superview.frame);
+    CGFloat width = CGRectGetWidth(self.bounds);
+    CGFloat height = CGRectGetHeight(self.bounds);
     if (self.isFullScreen) {
         self.zoomButton.selected = YES;
     } else {
