@@ -198,6 +198,9 @@
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
     self.playState = KBPlaybackStateReadyToPlay;
+    if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+        [self.delegate moviePlayBackStateDidChange:self.playState];
+    }
     if ([self.delegate respondsToSelector:@selector(refreshTotalDuration:)]) {
         [self.delegate refreshTotalDuration:self.ijkPlayer.duration];
     }

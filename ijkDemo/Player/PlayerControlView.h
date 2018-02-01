@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PlayerControlDelegate.h"
 #import "PlayerHeader.h"
+#import "Reachability.h"
 
 @interface PlayerControlView : UIView
 
@@ -22,5 +23,6 @@
 - (void)refreshProgress:(NSTimeInterval)currentTime;
 - (void)showError:(BOOL)isShow;// 待扩展 根据错误类型显示不同文案，以及响应不同事件
 - (void)updateCurrentFrameImage:(UIImage *)image;
+- (void)showNetworkWarning:(NetworkStatus)networkStatus;
 
 @end

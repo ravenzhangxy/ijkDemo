@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "BrightnessView.h"
+#import "KBPlayerHelper.h"
 
 #define kFixedScreenWidth    ( [[UIScreen mainScreen] respondsToSelector:@selector(fixedCoordinateSpace)] ? [UIScreen mainScreen].fixedCoordinateSpace.bounds.size.width : [UIScreen mainScreen].bounds.size.width )
 #define kScaleBaseForPhone6Radio (kFixedScreenWidth/375.0)
@@ -45,6 +46,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 @property (nonatomic, strong) UIButton *errorButton;
 @property (nonatomic, strong) UIImageView *currentFrameImageView;
 @property (nonatomic, strong) UIButton *replayButton;
+@property (nonatomic, strong) UIButton *networkButton;
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
@@ -104,6 +106,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     
     self.seekLabel.center = CGPointMake(width / 2, height / 2);
     self.errorButton.center = self.seekLabel.center;
+    self.networkButton.center = self.seekLabel.center;
     self.currentFrameImageView.center = self.seekLabel.center;
     self.replayButton.center = self.seekLabel.center;
     
@@ -138,6 +141,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     
     [self addSubview:self.seekLabel];
     [self addSubview:self.errorButton];
+    [self addSubview:self.networkButton];
     [self addSubview:self.currentFrameImageView];
     [self addSubview:self.replayButton];
     
@@ -233,6 +237,11 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
             self.replayButton.hidden = NO;
             self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
         }
+    } else if (playbackState == KBPlaybackStateReadyToPlay) {
+        if ([KBPlayerHelper sharedInstance].networkStatus == ReachableViaWWAN) {
+            _networkButton.hidden = NO;
+            [self.delegate pause];
+        }
     }
 }
 
@@ -303,6 +312,20 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 {
     if (!self.isPlay) {
         [self.delegate play];
+    }
+    self.networkButton.hidden = YES;
+}
+
+- (void)showNetworkWarning:(NetworkStatus)networkStatus
+{
+    if (networkStatus == ReachableViaWWAN) {
+        [_networkButton setTitle:@"当前为移动网络，确认继续播放吗？" forState:UIControlStateNormal];
+        _networkButton.hidden = NO;
+    } else if (networkStatus == ReachableViaWiFi) {
+        _networkButton.hidden = YES;
+    } else if (networkStatus == NotReachable) {
+        _networkButton.hidden = NO;
+        [_networkButton setTitle:@"当前没有网络连接，请检查网络" forState:UIControlStateNormal];
     }
 }
 
@@ -553,6 +576,19 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
         [_replayButton addTarget:self action:@selector(replay) forControlEvents:UIControlEventTouchUpInside];
     }
     return _replayButton;
+}
+
+- (UIButton *)networkButton
+{
+    if (!_networkButton) {
+        _networkButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _networkButton.frame = CGRectMake(0, 0, 300, 30);
+        [_networkButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_networkButton setTitle:@"当前为移动网络，确认继续播放吗？" forState:UIControlStateNormal];
+        [_networkButton addTarget:self action:@selector(replay) forControlEvents:UIControlEventTouchUpInside];
+        _networkButton.hidden = YES;
+    }
+    return _networkButton;
 }
 
 //通过颜色来生成一个纯色图片

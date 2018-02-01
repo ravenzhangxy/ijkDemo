@@ -10,6 +10,7 @@
 #import "IJKPlayerView.h"
 #import "AVPlayerView.h"
 #import "PlayerControlView.h"
+#import "KBPlayerHelper.h"
 
 @interface KBPlayer () <PlayerControlDelegate, PlayerDelegate>
 
@@ -39,6 +40,7 @@
         [self initPlayer:playerType url:url];
         [self initControlView:title];
         
+        [[KBPlayerHelper sharedInstance] addObserver:self forKeyPath:@"networkStatus" options:NSKeyValueObservingOptionNew context:nil];
         // 监测设备方向
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -253,6 +255,44 @@
     // 手动旋转屏幕
     NSNumber *orientationTarget = [NSNumber numberWithInt:orientation];
     [[UIDevice currentDevice] setValue:orientationTarget forKey:@"orientation"];
+}
+
+#pragma mark 监听网络状况
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == [KBPlayerHelper sharedInstance]) {
+        if ([keyPath isEqualToString:@"networkStatus"]) {
+            switch ([KBPlayerHelper sharedInstance].networkStatus) {
+                case ReachableViaWWAN:
+                {
+                    [self pause];
+                    [self.controlView showNetworkWarning:ReachableViaWWAN];
+                    break;
+                }
+                case ReachableViaWiFi:
+                {
+                    [self play];
+                    [self.controlView showNetworkWarning:ReachableViaWiFi];
+                    break;
+                }
+                case NotReachable:
+                {
+                    [self pause];
+                    [self.controlView showNetworkWarning:NotReachable];
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)dealloc
+{
+    [[KBPlayerHelper sharedInstance] removeObserver:self forKeyPath:@"networkStatus"];
 }
 
 @end

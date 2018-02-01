@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Reachability.h"
 
 @interface KBPlayerHelper : NSObject
+
+@property (nonatomic, assign) NetworkStatus networkStatus;
+
++ (instancetype)sharedInstance;
+- (void)registerReachability;
 
 @end
