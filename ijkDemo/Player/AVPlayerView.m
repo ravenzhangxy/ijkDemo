@@ -131,6 +131,10 @@
 #pragma mark private
 - (void)playDidFinished
 {
+    self.playState = KBPlaybackStateStopped;
+    if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+        [self.delegate moviePlayBackStateDidChange:KBPlaybackStateStopped];
+    }
     if ([self.delegate respondsToSelector:@selector(moviePlayBackDidFinish:)]) {
         [self.delegate moviePlayBackDidFinish:KBMovieFinishReasonPlaybackEnded];
     }

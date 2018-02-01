@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 @property (nonatomic, strong) BrightnessView *brightnessView;
 @property (nonatomic, strong) UIButton *errorButton;
 @property (nonatomic, strong) UIImageView *currentFrameImageView;
+@property (nonatomic, strong) UIButton *replayButton;
 
 @property (nonatomic, assign) BOOL isShowControl;
 @property (nonatomic, assign) BOOL isPlay;
@@ -102,8 +103,9 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     self.progressSlider.frame = sliderFrame;
     
     self.seekLabel.center = CGPointMake(width / 2, height / 2);
-    self.errorButton.center = CGPointMake(width / 2, height / 2);
-    self.currentFrameImageView.center = CGPointMake(width / 2, height / 2);
+    self.errorButton.center = self.seekLabel.center;
+    self.currentFrameImageView.center = self.seekLabel.center;
+    self.replayButton.center = self.seekLabel.center;
     
     [self.brightnessView removeFromSuperview];
     [[UIApplication sharedApplication].keyWindow addSubview:self.brightnessView];
@@ -137,6 +139,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     [self addSubview:self.seekLabel];
     [self addSubview:self.errorButton];
     [self addSubview:self.currentFrameImageView];
+    [self addSubview:self.replayButton];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self singleTapAction];
@@ -221,9 +224,15 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     if (playbackState == KBPlaybackStatePlaying) {
         self.isPlay = YES;
         self.playButton.selected = NO;
+        self.replayButton.hidden = YES;
+        self.backgroundColor = [UIColor clearColor];
     } else if (playbackState == KBPlaybackStatePaused || playbackState == KBPlaybackStateStopped || playbackState == KBPlaybackStateFailed) {
         self.isPlay = NO;
         self.playButton.selected = YES;
+        if (playbackState == KBPlaybackStateStopped) {
+            self.replayButton.hidden = NO;
+            self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+        }
     }
 }
 
@@ -288,6 +297,13 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 {
     self.currentFrameImageView.hidden = NO;
     self.currentFrameImageView.image = image;
+}
+
+- (void)replay
+{
+    if (!self.isPlay) {
+        [self.delegate play];
+    }
 }
 
 #pragma mark UIPanGestureRecognizer 滑动改变进度、音量、亮度
@@ -525,6 +541,18 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
         _currentFrameImageView.hidden = YES;
     }
     return _currentFrameImageView;
+}
+
+- (UIButton *)replayButton
+{
+    if (!_replayButton) {
+        _replayButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _replayButton.frame = CGRectMake(0, 0, 40 * kScaleBaseForPhone6Radio, 60 * kScaleBaseForPhone6Radio);
+        [_replayButton setBackgroundImage:KBPlayerImage(@"KBPlayer_replay") forState:UIControlStateNormal];
+        _replayButton.hidden = YES;
+        [_replayButton addTarget:self action:@selector(replay) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _replayButton;
 }
 
 //通过颜色来生成一个纯色图片
