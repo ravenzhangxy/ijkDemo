@@ -32,8 +32,6 @@
 		972009FF1FE285C0003CAEE5 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972009FB1FE285C0003CAEE5 /* PlayerView.m */; };
 		97200A021FE28615003CAEE5 /* IJKMediaFrameworkWithSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */; };
 		97200A031FE28615003CAEE5 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */; };
-		97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */; };
 		972AEFBB20170AFE000DB581 /* KBPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFBA20170AFE000DB581 /* KBPlayer.m */; };
 		972AEFDD20174ACA000DB581 /* IJKPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFDC20174ACA000DB581 /* IJKPlayerView.m */; };
 		972AEFE020174FE8000DB581 /* AVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 972AEFDF20174FE8000DB581 /* AVPlayerView.m */; };
@@ -91,8 +89,6 @@
 		972009FA1FE285C0003CAEE5 /* IJKMediaFrameworkWithSSL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFrameworkWithSSL.framework; sourceTree = "<group>"; };
 		972009FB1FE285C0003CAEE5 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
 		972009FC1FE285C0003CAEE5 /* PlayerControlDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerControlDelegate.h; sourceTree = "<group>"; };
-		97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoMiniScreen@2x.png"; sourceTree = "<group>"; };
-		97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_videoAllScreen@2x.png"; sourceTree = "<group>"; };
 		972AEFB920170AFE000DB581 /* KBPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBPlayer.h; sourceTree = "<group>"; };
 		972AEFBA20170AFE000DB581 /* KBPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KBPlayer.m; sourceTree = "<group>"; };
 		972AEFBC20171A7E000DB581 /* PlayerHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerHeader.h; sourceTree = "<group>"; };
@@ -162,8 +158,6 @@
 				9720094D1FDE972B003CAEE5 /* AppDelegate.m */,
 				9720094F1FDE972B003CAEE5 /* ViewController.h */,
 				972009501FDE972B003CAEE5 /* ViewController.m */,
-				97200A081FE2905A003CAEE5 /* challenge_videoAllScreen@2x.png */,
-				97200A061FE29059003CAEE5 /* challenge_videoMiniScreen@2x.png */,
 				972009F61FE28583003CAEE5 /* Player */,
 				972009871FDE9E06003CAEE5 /* RootViewController.h */,
 				972009881FDE9E06003CAEE5 /* RootViewController.m */,
@@ -310,11 +304,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97200A0A1FE2905B003CAEE5 /* challenge_videoMiniScreen@2x.png in Resources */,
 				972009591FDE972B003CAEE5 /* LaunchScreen.storyboard in Resources */,
 				972009561FDE972B003CAEE5 /* Assets.xcassets in Resources */,
 				972AF0072019E9BB000DB581 /* KBPlayer.bundle in Resources */,
-				97200A0C1FE2905B003CAEE5 /* challenge_videoAllScreen@2x.png in Resources */,
 				972009541FDE972B003CAEE5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
