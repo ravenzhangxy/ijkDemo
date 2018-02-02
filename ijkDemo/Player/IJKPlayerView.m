@@ -111,6 +111,11 @@
     if ([self.delegate respondsToSelector:@selector(refreshProgress:)]) {
         [self.delegate refreshProgress:self.ijkPlayer.currentPlaybackTime];
     }
+    if (self.ijkPlayer.playableDuration / self.ijkPlayer.duration <= 1.f) {
+        if ([self.delegate respondsToSelector:@selector(refreshBufferProgress:)]) {
+            [self.delegate refreshBufferProgress:self.ijkPlayer.playableDuration / self.ijkPlayer.duration];
+        }
+    }
 }
 
 #pragma mark Install Movie Notifications
