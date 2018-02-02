@@ -11,11 +11,13 @@
 #import "AVPlayerView.h"
 #import "PlayerControlView.h"
 #import "KBPlayerHelper.h"
+#import "MBProgressHUD.h"
 
 @interface KBPlayer () <PlayerControlDelegate, PlayerDelegate>
 
 @property (nonatomic, strong) PlayerView *playerView;
 @property (nonatomic, strong) PlayerControlView *controlView;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) CGRect originFrame;
@@ -48,6 +50,9 @@
                                                      name:UIDeviceOrientationDidChangeNotification
                                                    object:nil];
         [self transformFullScreen:isfullScreen];
+        
+        self.hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+        self.hud.mode = MBProgressHUDModeIndeterminate;
     }
     return self;
 }
@@ -190,6 +195,7 @@
         }
     }
     [self.controlView refreshPlayBtnState:playbackState];
+    [self.hud removeFromSuperview];
 }
 
 - (void)moviePlayBackDidFinish:(NSInteger)movieFinishReason
@@ -204,6 +210,7 @@
         case KBMovieFinishReasonUserExited:
             break;
         case KBMovieFinishReasonPlaybackError:
+            [self.hud removeFromSuperview];
             break;
         default:
             break;
