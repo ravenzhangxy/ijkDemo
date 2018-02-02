@@ -40,6 +40,11 @@
     
 }
 
+- (void)replay
+{
+    
+}
+
 - (void)seekToTime:(NSTimeInterval)time
 {
     

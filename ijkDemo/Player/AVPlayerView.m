@@ -73,6 +73,15 @@
     }
 }
 
+- (void)replay
+{
+    [self.player seekToTime:CMTimeMake(0, 1)];
+    [self.player play];
+    if ([self.delegate respondsToSelector:@selector(moviePlayBackStateDidChange:)]) {
+        [self.delegate moviePlayBackStateDidChange:KBPlaybackStatePlaying];
+    }
+}
+
 - (void)seekToTime:(NSTimeInterval)time
 {
     [self.player seekToTime:CMTimeMake(time, 1)];
@@ -164,12 +173,11 @@
                 [self.delegate moviePlayBackStateDidChange:self.playState];
             }
         } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
-            //TODO:显示缓冲进度
             //计算缓冲进度
-            //            NSTimeInterval timeInterval = [self availableDuration];
-            //            CMTime duration             = self.playerItem.duration;
-            //            CGFloat totalDuration       = CMTimeGetSeconds(duration);
-            //            [self.controlView zf_playerSetProgress:timeInterval / totalDuration];
+            NSTimeInterval timeInterval = [self availableDuration];
+            CMTime duration             = self.playerItem.duration;
+            CGFloat totalDuration       = CMTimeGetSeconds(duration);
+            [self.delegate refreshBufferProgress:timeInterval / totalDuration];
         } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
             // 当缓冲是空的时候
         } else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {

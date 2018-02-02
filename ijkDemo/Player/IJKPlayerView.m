@@ -64,6 +64,11 @@
     [self.ijkPlayer pause];
 }
 
+- (void)replay
+{
+    [self.ijkPlayer play];
+}
+
 - (void)shutdown
 {
     [self.timer invalidate];

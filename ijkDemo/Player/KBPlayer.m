@@ -99,6 +99,11 @@
     [self.playerView pause];
 }
 
+- (void)replay
+{
+    [self.playerView replay];
+}
+
 - (void)back
 {
     [self shutdown];
@@ -144,6 +149,11 @@
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration
 {
     [self.controlView refreshTotalDuration:totalDuration];
+}
+
+- (void)refreshBufferProgress:(CGFloat)progress
+{
+    [self.controlView refreshBufferProgress:progress];
 }
 
 - (void)moviePlayBackStateDidChange:(NSInteger)playbackState

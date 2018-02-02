@@ -39,6 +39,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 //progress
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider;
+@property (nonatomic, strong) UIProgressView *bufferProgressView;
 //
 @property (nonatomic, strong) UILabel *seekLabel;
 @property (nonatomic, strong) UISlider *volumeSlider;
@@ -104,6 +105,12 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     sliderFrame.size.width = CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_timeLabel.frame) - CGRectGetWidth(_zoomButton.frame) - 10;
     self.progressSlider.frame = sliderFrame;
     
+    CGRect progressViewFrame = self.bufferProgressView.frame;
+    progressViewFrame.origin.x = CGRectGetMaxX(self.timeLabel.frame) + 12;
+    progressViewFrame.size.width = CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_timeLabel.frame) - CGRectGetWidth(_zoomButton.frame) - 12;
+    self.bufferProgressView.frame = progressViewFrame;
+    self.bufferProgressView.center = CGPointMake(_bufferProgressView.center.x, CGRectGetHeight(_bottomPanel.frame) / 2);
+
     self.seekLabel.center = CGPointMake(width / 2, height / 2);
     self.errorButton.center = self.seekLabel.center;
     self.networkButton.center = self.seekLabel.center;
@@ -137,6 +144,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     [self.bottomPanel addSubview:self.playButton];
     [self.bottomPanel addSubview:self.timeLabel];
     [self.bottomPanel addSubview:self.zoomButton];
+    [self.bottomPanel addSubview:self.bufferProgressView];
     [self.bottomPanel addSubview:self.progressSlider];
     
     [self addSubview:self.seekLabel];
@@ -285,6 +293,11 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     self.timeLabel.text = [NSString stringWithFormat:@"%@/%@", current, total];
 }
 
+- (void)refreshBufferProgress:(CGFloat)progress
+{
+    [self.bufferProgressView setProgress:progress animated:YES];
+}
+
 - (void)retry
 {
     self.errorButton.hidden = YES;
@@ -311,7 +324,7 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
 - (void)replay
 {
     if (!self.isPlay) {
-        [self.delegate play];
+        [self.delegate replay];
     }
     self.networkButton.hidden = YES;
 }
@@ -513,13 +526,22 @@ typedef NS_ENUM(NSUInteger, AdjustType) {
     return _titleLabel;
 }
 
+- (UIProgressView *)bufferProgressView
+{
+    if (!_bufferProgressView) {
+        _bufferProgressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+        _bufferProgressView.progressTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+        _bufferProgressView.trackTintColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+    }
+    return _bufferProgressView;
+}
+
 - (UISlider *)progressSlider
 {
     if (!_progressSlider) {
         _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_timeLabel.frame) + 10, 0, CGRectGetWidth(_bottomPanel.frame) - CGRectGetMaxX(_timeLabel.frame) - CGRectGetWidth(_zoomButton.frame) - 10, CGRectGetHeight(_bottomPanel.frame))];
-        _progressSlider.center = CGPointMake(_progressSlider.center.x, CGRectGetHeight(_bottomPanel.frame) / 2);
         _progressSlider.minimumTrackTintColor = [UIColor blueColor];
-        _progressSlider.maximumTrackTintColor = [UIColor whiteColor];
+        _progressSlider.maximumTrackTintColor = [UIColor clearColor];
         UIImage *thumbImg = [self getImageFromColor:[UIColor whiteColor] size:CGSizeMake(10, 10)];
         [_progressSlider setThumbImage:thumbImg forState:UIControlStateNormal];
         [_progressSlider setThumbImage:thumbImg forState:UIControlStateHighlighted];

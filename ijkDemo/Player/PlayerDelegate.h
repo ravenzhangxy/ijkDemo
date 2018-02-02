@@ -11,6 +11,7 @@
 @protocol PlayerDelegate <NSObject>
 
 - (void)refreshProgress:(NSTimeInterval)time;
+- (void)refreshBufferProgress:(CGFloat)progress;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)moviePlayBackStateDidChange:(NSInteger)playbackState;
 - (void)moviePlayBackDidFinish:(NSInteger)movieFinishReason;

@@ -20,6 +20,7 @@
 - (void)initPlayer:(NSURL *)url;
 - (void)play;
 - (void)pause;
+- (void)replay;
 - (void)shutdown;
 - (void)seekToTime:(NSTimeInterval)time;
 - (UIImage *)thumbnailImageAtCurrentTime;

@@ -21,6 +21,7 @@
 - (void)refreshPlayBtnState:(KBPlaybackState)playbackState;
 - (void)refreshTotalDuration:(NSTimeInterval)totalDuration;
 - (void)refreshProgress:(NSTimeInterval)currentTime;
+- (void)refreshBufferProgress:(CGFloat)progress;
 - (void)showError:(BOOL)isShow;// 待扩展 根据错误类型显示不同文案，以及响应不同事件
 - (void)updateCurrentFrameImage:(UIImage *)image;
 - (void)showNetworkWarning:(NetworkStatus)networkStatus;
